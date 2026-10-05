@@ -16,7 +16,8 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
 
 - `ee_pipi/` — the resulting form factors as Mathematica expressions, one file per form factor
   (`FF_Tree_1.m`, `FF_Tree_2.m`, `FF_1L_1.m`, `FF_1L_2.m`) plus the Gram matrix of the basis. Both notebooks
-  write here; the one-loop files are in the scalar A0/B0/C0/D0 basis with D kept symbolic.
+  write here. The files are expressed in s, t, m12 = me² and m32 = mpi² (odd powers of the masses appear as
+  Sqrt[m12], Sqrt[m32]); the one-loop files are in the scalar A0/B0/C0/D0 basis with D kept symbolic.
 
 ## Requirements
 
