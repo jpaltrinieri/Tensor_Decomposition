@@ -14,6 +14,10 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
   per diagram class, and alternative strategies (IBP reduction to master integrals, helicity amplitudes,
   numerical evaluation) are discussed.
 
+- `ee_pipi/` — the resulting form factors as Mathematica expressions, one file per form factor
+  (`FF_Tree_1.m`, `FF_Tree_2.m`, `FF_1L_1.m`, `FF_1L_2.m`) plus the Gram matrix of the basis. Both notebooks
+  write here; the one-loop files are in the scalar A0/B0/C0/D0 basis with D kept symbolic.
+
 ## Requirements
 
 Mathematica 13+, FeynCalc 10 with the FeynArts add-on. Scalar QED is obtained from the FeynArts SM

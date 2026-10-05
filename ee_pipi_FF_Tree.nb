@@ -10,16 +10,16 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     13926,        335]
-NotebookOptionsPosition[     11767,        302]
-NotebookOutlinePosition[     12109,        317]
-CellTagsIndexPosition[     12066,        314]
+NotebookDataLength[     16069,        391]
+NotebookOptionsPosition[     13626,        355]
+NotebookOutlinePosition[     13968,        370]
+CellTagsIndexPosition[     13925,        367]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell["Tensor Decomposition for e+e- \[LongRightArrow] \[Pi]+\[Pi]- at LO \
-(optimised)", "Title",ExpressionUUID->"90af6fbf-f055-4955-b27e-9658dbed8bbb"],
+(optimised)", "Title",ExpressionUUID->"eadca010-435b-4e3b-9cd3-f617f3aadaaf"],
 
 Cell["\<\
 Scalar QED amplitude for e+(p1) e-(p2) \[LongRightArrow] \[Pi]+(p3) \
@@ -27,9 +27,9 @@ Scalar QED amplitude for e+(p1) e-(p2) \[LongRightArrow] \[Pi]+(p3) \
 B, where G is the Gram matrix of the basis and B the projection of the \
 amplitude onto it. Expected result: F1 = -2e^2/s and F2 = 0 (the scalar \
 structure needs a helicity flip and only appears beyond LO).\
-\>", "Text",ExpressionUUID->"876f3150-3b1b-4747-b87d-347703adefe6"],
+\>", "Text",ExpressionUUID->"a46988f8-22d0-49fe-8c3f-68f90f80710c"],
 
-Cell["1. Packages", "Section",ExpressionUUID->"5b3c53cf-5dce-412f-b880-2b123ee76bbb"],
+Cell["1. Packages", "Section",ExpressionUUID->"595c3938-ad98-4dd7-8edb-8991f9292e77"],
 
 Cell[BoxData[{
  RowBox[{
@@ -41,16 +41,16 @@ Cell[BoxData[{
   RowBox[{"Get", "[", "\"\<FeynCalc`\>\"", "]"}], ";"}], "\n", 
  RowBox[{
   RowBox[{"$FAVerbose", " ", "=", " ", "0"}], ";"}]}], "Input",ExpressionUUID->\
-"fa489a56-9177-4612-b211-817fa0852872"],
+"756d394d-d50d-498a-9791-fd788f053d6f"],
 
-Cell["2. Kinematics", "Section",ExpressionUUID->"07ec181b-8d5b-46f6-ae95-245be870a747"],
+Cell["2. Kinematics", "Section",ExpressionUUID->"0cc934b5-eb30-4a0d-8104-d921313a78f0"],
 
 Cell["\<\
 SetMandelstam fixes all ten scalar products at once (momenta taken as \
 incoming, hence -p3, -p4). The fourth invariant is passed directly as 2me^2 + \
 2m\[Pi]^2 - s - t, so u never appears in the results. Masses are kept \
 symbolic through FeynCalc's SMP symbols.\
-\>", "Text",ExpressionUUID->"8bf4eb23-3adf-4500-952b-d2573f380ccb"],
+\>", "Text",ExpressionUUID->"8adad98f-9c54-402c-a877-2c4c43175a4c"],
 
 Cell[BoxData[{
  RowBox[{
@@ -79,9 +79,9 @@ Cell[BoxData[{
     RowBox[{"s", " ", ">", " ", "0"}], " ", "&&", " ", 
     RowBox[{"me", " ", ">", " ", "0"}], " ", "&&", " ", 
     RowBox[{"mpi", " ", ">", " ", "0"}]}]}], ";"}]}], "Input",ExpressionUUID->\
-"fdee58c5-7c4f-4045-9399-f53db9ae6e67"],
+"010d7a25-c1be-432d-bcc0-fa675e5e1a14"],
 
-Cell["3. Amplitude from FeynArts", "Section",ExpressionUUID->"dc365526-e81e-4967-bec4-6bc49e1bac7a"],
+Cell["3. Amplitude from FeynArts", "Section",ExpressionUUID->"d9a83c18-1348-485a-86cf-3493ded91040"],
 
 Cell["\<\
 FeynArts has no built-in scalar QED model. The charged Goldstone boson S[3] \
@@ -89,7 +89,7 @@ of the SM model couples to the photon exactly like a charged scalar, so \
 excluding the Z, W, Higgs, neutral Goldstone, ghosts, and all other fermions \
 leaves pure sQED; the mass is renamed via FinalSubstitutions. The electric \
 charge is kept symbolic.\
-\>", "Text",ExpressionUUID->"d585edc6-a52c-478c-a7f6-133731a340bd"],
+\>", "Text",ExpressionUUID->"7ac5f68b-80c8-4490-8b93-b9f993fbb675"],
 
 Cell[BoxData[{
  RowBox[{
@@ -144,7 +144,7 @@ Cell[BoxData[{
     RowBox[{"ImageSize", " ", "->", " ", 
      RowBox[{"{", 
       RowBox[{"256", ",", " ", "256"}], "}"}]}]}], "]"}], ";"}]}], "Input",Exp\
-ressionUUID->"12729652-c445-4fd8-b988-c2f5b82252e7"],
+ressionUUID->"bc193c2c-921f-4c89-b0e6-5d6afb46af5e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -171,9 +171,9 @@ Cell[BoxData[{
  RowBox[{"amp", " ", "=", " ", 
   RowBox[{"DiracSimplify", "[", 
    RowBox[{"FeynAmpDenominatorExplicit", "[", "amp", "]"}], "]"}]}]}], "Input",\
-ExpressionUUID->"9ab5d643-969e-4910-bae8-2acfd5cb8119"],
+ExpressionUUID->"4483b79b-0ed1-4562-bc17-b8f1fb7de0dd"],
 
-Cell["4. Tensor decomposition", "Section",ExpressionUUID->"2203f147-c170-4ca1-a06e-504002b6151d"],
+Cell["4. Tensor decomposition", "Section",ExpressionUUID->"cd94853e-2600-4060-95b0-7b9fb2bcf460"],
 
 Cell["\<\
 Generic helpers: the Gram matrix G_ij = \[Sum]_spins T_i T_j^* and the \
@@ -181,7 +181,7 @@ projections B_i = \[Sum]_spins T_i^* M. The form factors follow from \
 LinearSolve, which avoids forming the symbolic inverse. Everything is written \
 in terms of Length[basis], so adding a structure (e.g. at one loop) needs no \
 other change.\
-\>", "Text",ExpressionUUID->"764a3bf1-f68c-4424-9c47-47542ecfd9a2"],
+\>", "Text",ExpressionUUID->"54b0c0c7-28fb-48c6-9b2c-4496f2570f2c"],
 
 Cell[BoxData[{
  RowBox[{
@@ -243,14 +243,14 @@ Cell[BoxData[{
         RowBox[{"Simplify", "[", 
          RowBox[{"LinearSolve", "[", 
           RowBox[{"G", ",", " ", "B"}], "]"}], "]"}]}], "}"}]}]}], "]"}]}], 
-  ";"}]}], "Input",ExpressionUUID->"4b2eaf75-17ba-4185-b3d2-228123b7cd05"],
+  ";"}]}], "Input",ExpressionUUID->"de445f1f-d67c-4a96-90a7-9110e52f69ad"],
 
 Cell["\<\
 Basis. GS[p3] is \[Gamma]\[CenterDot]p3 already contracted, so no dummy \
 Lorentz index is needed. Only p3 appears because vbar(p1).(p3+p4)slash.u(p2) \
 = vbar(p1).(p1+p2)slash.u(p2) = 0 by the Dirac equation, so (p3-p4)slash is \
 equivalent to 2 p3slash between these spinors.\
-\>", "Text",ExpressionUUID->"c0780e04-333b-48a5-a869-a85402f15fd4"],
+\>", "Text",ExpressionUUID->"4f70f5af-2efd-4015-a8c0-81198db23851"],
 
 Cell[BoxData[{
  RowBox[{
@@ -272,7 +272,7 @@ Cell[BoxData[{
   RowBox[{"basis", " ", "=", " ", 
    RowBox[{"{", 
     RowBox[{"T1", ",", " ", "T2"}], "}"}]}], ";"}]}], "Input",ExpressionUUID->\
-"ba8c3f1f-d8c6-4265-a2ef-55b6a4da47dc"],
+"98d8f724-70e7-46f6-922b-6bbe8c1e295e"],
 
 Cell[BoxData[{
  RowBox[{
@@ -282,28 +282,81 @@ Cell[BoxData[{
    RowBox[{"formFactors", "[", 
     RowBox[{"amp", ",", " ", "basis"}], "]"}]}], ";"}], "\n", 
  RowBox[{"G", " ", "//", " ", "MatrixForm"}]}], "Input",ExpressionUUID->\
-"79df45d7-3b17-492e-94ee-011ab2ac5d99"],
+"359703f7-3f5d-4551-a11d-a4de87c52e75"],
 
 Cell[BoxData[
  RowBox[{"Factor", "[", 
-  RowBox[{"Det", "[", "G", "]"}], "]"}]], "Input",ExpressionUUID->"db935042-\
-6569-4b83-813d-c37da2c4297a"],
+  RowBox[{"Det", "[", "G", "]"}], "]"}]], "Input",ExpressionUUID->"2b3f2262-\
+f8c5-4bd6-82d6-24c6093fc1d2"],
 
 Cell["\<\
 The Gram determinant is proportional to the squared momentum of the pion in \
 the CM frame, i.e. to s - 4m\[Pi]^2, times the forward/backward factor; the \
 decomposition is singular at threshold and in the exactly collinear \
 configuration, as it must be.\
-\>", "Text",ExpressionUUID->"cbf256fa-5cab-43be-a125-c3b1a1e087ff"],
+\>", "Text",ExpressionUUID->"9aa2cf96-f950-4340-9464-64713eea72ab"],
 
-Cell[BoxData["Bvec"], "Input",ExpressionUUID->"f21a5b46-0ce3-4095-887a-1910d777f5f1"],
+Cell[BoxData["Bvec"], "Input",ExpressionUUID->"893913eb-ebb2-4470-861b-a54ae0ac1697"],
 
-Cell[BoxData["Fvec"], "Input",ExpressionUUID->"9bf447b3-4b2d-433f-9f23-fa6bf6c6ac8f"]
+Cell[BoxData["Fvec"], "Input",ExpressionUUID->"83bff874-1a37-45c6-96ee-dfe9e5072794"],
+
+Cell["5. Save", "Section",ExpressionUUID->"30a359cf-fc10-43e7-8831-368eeeb285db"],
+
+Cell["\<\
+The Gram matrix and the two form factors are written as Mathematica \
+expressions into the folder ee_pipi next to the notebook (created if needed), \
+one file per form factor.\
+\>", "Text",ExpressionUUID->"7acdcb72-6673-4204-9f3b-63c462d17fe3"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"outDir", " ", "=", " ", 
+   RowBox[{"FileNameJoin", "[", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"Quiet", "[", 
+       RowBox[{"Check", "[", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
+         RowBox[{"Directory", "[", "]"}]}], "]"}], "]"}], ",", 
+      " ", "\"\<ee_pipi\>\""}], "}"}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"If", "[", 
+   RowBox[{
+    RowBox[{"!", " ", 
+     RowBox[{"DirectoryQ", "[", "outDir", "]"}]}], ",", " ", 
+    RowBox[{"CreateDirectory", "[", "outDir", "]"}]}], "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Put", "[", 
+   RowBox[{"G", ",", " ", 
+    RowBox[{"FileNameJoin", "[", 
+     RowBox[{"{", 
+      RowBox[{"outDir", ",", " ", "\"\<Gram_Matrix.m\>\""}], "}"}], "]"}]}], 
+   "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Do", "[", 
+   RowBox[{
+    RowBox[{"Put", "[", 
+     RowBox[{
+      RowBox[{"Fvec", "[", 
+       RowBox[{"[", "i", "]"}], "]"}], ",", " ", 
+      RowBox[{"FileNameJoin", "[", 
+       RowBox[{"{", 
+        RowBox[{"outDir", ",", " ", 
+         RowBox[{"\"\<FF_Tree_\>\"", " ", "<>", " ", 
+          RowBox[{"ToString", "[", "i", "]"}], " ", "<>", 
+          " ", "\"\<.m\>\""}]}], "}"}], "]"}]}], "]"}], ",", " ", 
+    RowBox[{"{", 
+     RowBox[{"i", ",", " ", 
+      RowBox[{"Length", "[", "basis", "]"}]}], "}"}]}], "]"}], ";"}], "\n", 
+ RowBox[{"FileNames", "[", 
+  RowBox[{"\"\<*\>\"", ",", " ", "outDir"}], "]"}]}], "Input",ExpressionUUID->\
+"8484dd4e-d448-4af0-b52e-748a022e185d"]
 },
 WindowSize->{1100, 800},
 FrontEndVersion->"14.3 for Mac OS X ARM (64-bit) (July 8, 2025)",
 StyleDefinitions->"Default.nb",
-ExpressionUUID->"6176fb2c-716b-4dbb-beca-672a9f532b6e"
+ExpressionUUID->"b5dcbda5-d5f1-4d81-ab1b-5d8ce23db201"
 ]
 (* End of Notebook Content *)
 
@@ -316,27 +369,30 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[554, 20, 152, 1, 70, "Title",ExpressionUUID->"90af6fbf-f055-4955-b27e-9658dbed8bbb"],
-Cell[709, 23, 435, 6, 70, "Text",ExpressionUUID->"876f3150-3b1b-4747-b87d-347703adefe6"],
-Cell[1147, 31, 85, 0, 70, "Section",ExpressionUUID->"5b3c53cf-5dce-412f-b880-2b123ee76bbb"],
-Cell[1235, 33, 417, 10, 70, "Input",ExpressionUUID->"fa489a56-9177-4612-b211-817fa0852872"],
-Cell[1655, 45, 87, 0, 70, "Section",ExpressionUUID->"07ec181b-8d5b-46f6-ae95-245be870a747"],
-Cell[1745, 47, 343, 5, 70, "Text",ExpressionUUID->"8bf4eb23-3adf-4500-952b-d2573f380ccb"],
-Cell[2091, 54, 1066, 27, 70, "Input",ExpressionUUID->"fdee58c5-7c4f-4045-9399-f53db9ae6e67"],
-Cell[3160, 83, 100, 0, 70, "Section",ExpressionUUID->"dc365526-e81e-4967-bec4-6bc49e1bac7a"],
-Cell[3263, 85, 411, 6, 70, "Text",ExpressionUUID->"d585edc6-a52c-478c-a7f6-133731a340bd"],
-Cell[3677, 93, 2125, 53, 70, "Input",ExpressionUUID->"12729652-c445-4fd8-b988-c2f5b82252e7"],
-Cell[5805, 148, 1169, 25, 70, "Input",ExpressionUUID->"9ab5d643-969e-4910-bae8-2acfd5cb8119"],
-Cell[6977, 175, 97, 0, 70, "Section",ExpressionUUID->"2203f147-c170-4ca1-a06e-504002b6151d"],
-Cell[7077, 177, 395, 6, 70, "Text",ExpressionUUID->"764a3bf1-f68c-4424-9c47-47542ecfd9a2"],
-Cell[7475, 185, 2208, 60, 70, "Input",ExpressionUUID->"4b2eaf75-17ba-4185-b3d2-228123b7cd05"],
-Cell[9686, 247, 356, 5, 70, "Text",ExpressionUUID->"c0780e04-333b-48a5-a869-a85402f15fd4"],
-Cell[10045, 254, 714, 20, 70, "Input",ExpressionUUID->"ba8c3f1f-d8c6-4265-a2ef-55b6a4da47dc"],
-Cell[10762, 276, 339, 8, 70, "Input",ExpressionUUID->"79df45d7-3b17-492e-94ee-011ab2ac5d99"],
-Cell[11104, 286, 146, 3, 70, "Input",ExpressionUUID->"db935042-6569-4b83-813d-c37da2c4297a"],
-Cell[11253, 291, 334, 5, 70, "Text",ExpressionUUID->"cbf256fa-5cab-43be-a125-c3b1a1e087ff"],
-Cell[11590, 298, 85, 0, 70, "Input",ExpressionUUID->"f21a5b46-0ce3-4095-887a-1910d777f5f1"],
-Cell[11678, 300, 85, 0, 70, "Input",ExpressionUUID->"9bf447b3-4b2d-433f-9f23-fa6bf6c6ac8f"]
+Cell[554, 20, 152, 1, 70, "Title",ExpressionUUID->"eadca010-435b-4e3b-9cd3-f617f3aadaaf"],
+Cell[709, 23, 435, 6, 70, "Text",ExpressionUUID->"a46988f8-22d0-49fe-8c3f-68f90f80710c"],
+Cell[1147, 31, 85, 0, 70, "Section",ExpressionUUID->"595c3938-ad98-4dd7-8edb-8991f9292e77"],
+Cell[1235, 33, 417, 10, 70, "Input",ExpressionUUID->"756d394d-d50d-498a-9791-fd788f053d6f"],
+Cell[1655, 45, 87, 0, 70, "Section",ExpressionUUID->"0cc934b5-eb30-4a0d-8104-d921313a78f0"],
+Cell[1745, 47, 343, 5, 70, "Text",ExpressionUUID->"8adad98f-9c54-402c-a877-2c4c43175a4c"],
+Cell[2091, 54, 1066, 27, 70, "Input",ExpressionUUID->"010d7a25-c1be-432d-bcc0-fa675e5e1a14"],
+Cell[3160, 83, 100, 0, 70, "Section",ExpressionUUID->"d9a83c18-1348-485a-86cf-3493ded91040"],
+Cell[3263, 85, 411, 6, 70, "Text",ExpressionUUID->"7ac5f68b-80c8-4490-8b93-b9f993fbb675"],
+Cell[3677, 93, 2125, 53, 70, "Input",ExpressionUUID->"bc193c2c-921f-4c89-b0e6-5d6afb46af5e"],
+Cell[5805, 148, 1169, 25, 70, "Input",ExpressionUUID->"4483b79b-0ed1-4562-bc17-b8f1fb7de0dd"],
+Cell[6977, 175, 97, 0, 70, "Section",ExpressionUUID->"cd94853e-2600-4060-95b0-7b9fb2bcf460"],
+Cell[7077, 177, 395, 6, 70, "Text",ExpressionUUID->"54b0c0c7-28fb-48c6-9b2c-4496f2570f2c"],
+Cell[7475, 185, 2208, 60, 70, "Input",ExpressionUUID->"de445f1f-d67c-4a96-90a7-9110e52f69ad"],
+Cell[9686, 247, 356, 5, 70, "Text",ExpressionUUID->"4f70f5af-2efd-4015-a8c0-81198db23851"],
+Cell[10045, 254, 714, 20, 70, "Input",ExpressionUUID->"98d8f724-70e7-46f6-922b-6bbe8c1e295e"],
+Cell[10762, 276, 339, 8, 70, "Input",ExpressionUUID->"359703f7-3f5d-4551-a11d-a4de87c52e75"],
+Cell[11104, 286, 146, 3, 70, "Input",ExpressionUUID->"2b3f2262-f8c5-4bd6-82d6-24c6093fc1d2"],
+Cell[11253, 291, 334, 5, 70, "Text",ExpressionUUID->"9aa2cf96-f950-4340-9464-64713eea72ab"],
+Cell[11590, 298, 85, 0, 70, "Input",ExpressionUUID->"893913eb-ebb2-4470-861b-a54ae0ac1697"],
+Cell[11678, 300, 85, 0, 70, "Input",ExpressionUUID->"83bff874-1a37-45c6-96ee-dfe9e5072794"],
+Cell[11766, 302, 81, 0, 70, "Section",ExpressionUUID->"30a359cf-fc10-43e7-8831-368eeeb285db"],
+Cell[11850, 304, 254, 4, 70, "Text",ExpressionUUID->"7acdcb72-6673-4204-9f3b-63c462d17fe3"],
+Cell[12107, 310, 1515, 43, 70, "Input",ExpressionUUID->"8484dd4e-d448-4af0-b52e-748a022e185d"]
 }
 ]
 *)
