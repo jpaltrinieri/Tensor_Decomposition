@@ -1,30 +1,20 @@
-(SMP["e"]^4*((-2*SMP["m_e"]^2*(-2*(-2 + D)*B0[s, 0, 0] + 
-      2*(-2 + D)*B0[SMP["m_e"]^2, 0, SMP["m_e"]^2] + 
-      C0[s, SMP["m_e"]^2, SMP["m_e"]^2, 0, 0, SMP["m_e"]^2]*
-       (-(D*s) + 8*SMP["m_e"]^2)))/(s - 4*SMP["m_e"]^2) - 
-   ((-((-2 + D)*A0[SMP["m_e"]^2]) + 
-      2*((-5 + D)*B0[s, SMP["m_e"]^2, SMP["m_e"]^2] + 
-        2*B0[SMP["m_e"]^2, 0, SMP["m_e"]^2])*SMP["m_e"]^2)*
-     (s + 2*t - 2*SMP["m_e"]^2 - 2*SMP["m_pi"]^2))/(s*(s - 4*SMP["m_e"]^2)) + 
-   (2*SMP["m_e"]^2*(s + t - SMP["m_e"]^2 - 2*SMP["m_pi"]^2)*
-     (-(C0[s, SMP["m_pi"]^2, SMP["m_pi"]^2, 0, 0, SMP["m_pi"]^2]*
-        (s - 4*SMP["m_pi"]^2)) + 2*C0[SMP["m_e"]^2, SMP["m_pi"]^2, 
-        -s - t + 2*SMP["m_e"]^2 + 2*SMP["m_pi"]^2, SMP["m_e"]^2, 0, 
-        SMP["m_pi"]^2]*(s + t - SMP["m_e"]^2 - 3*SMP["m_pi"]^2) - 
-      s*D0[s, SMP["m_e"]^2, -s - t + 2*SMP["m_e"]^2 + 2*SMP["m_pi"]^2, 
-        SMP["m_pi"]^2, SMP["m_e"]^2, SMP["m_pi"]^2, 0, 0, SMP["m_e"]^2, 
-        SMP["m_pi"]^2]*(s + t - SMP["m_e"]^2 - 3*SMP["m_pi"]^2) - 
-      C0[s, SMP["m_e"]^2, SMP["m_e"]^2, 0, 0, SMP["m_e"]^2]*
-       (s + 2*t - 2*SMP["m_e"]^2 - 2*SMP["m_pi"]^2)))/
-    (t*(s + t) + SMP["m_e"]^4 - 2*t*SMP["m_pi"]^2 + SMP["m_pi"]^4 - 
-     2*SMP["m_e"]^2*(t + SMP["m_pi"]^2)) - 
-   (2*SMP["m_e"]^2*(-t + SMP["m_e"]^2)*
-     (C0[s, SMP["m_pi"]^2, SMP["m_pi"]^2, 0, 0, SMP["m_pi"]^2]*
-       (s - 4*SMP["m_pi"]^2) - C0[s, SMP["m_e"]^2, SMP["m_e"]^2, 0, 0, 
-        SMP["m_e"]^2]*(s + 2*t - 2*SMP["m_e"]^2 - 2*SMP["m_pi"]^2) + 
-      (2*C0[t, SMP["m_e"]^2, SMP["m_pi"]^2, SMP["m_pi"]^2, SMP["m_e"]^2, 0] - 
-        s*D0[s, SMP["m_e"]^2, t, SMP["m_pi"]^2, SMP["m_e"]^2, SMP["m_pi"]^2, 
-          0, 0, SMP["m_e"]^2, SMP["m_pi"]^2])*(t - SMP["m_e"]^2 + 
-        SMP["m_pi"]^2)))/(t*(s + t) + SMP["m_e"]^4 - 2*t*SMP["m_pi"]^2 + 
-     SMP["m_pi"]^4 - 2*SMP["m_e"]^2*(t + SMP["m_pi"]^2))))/
- (16*Pi^2*SMP["m_e"])
+((-(((2*me^2 + 2*mpi^2 - s - 2*t)*(-((-2 + D)*A0[me^2]) + 
+       2*me^2*(2*B0[me^2, 0, me^2] + (-5 + D)*B0[s, me^2, me^2])))/
+     ((4*me^2 - s)*s)) + (2*me^2*(2*(-2 + D)*B0[me^2, 0, me^2] - 
+      2*(-2 + D)*B0[s, 0, 0] + (8*me^2 - D*s)*C0[me^2, me^2, s, 0, me^2, 0]))/
+    (4*me^2 - s) + (2*me^2*(me^2 + 2*mpi^2 - s - t)*
+     (-((2*me^2 + 2*mpi^2 - s - 2*t)*C0[me^2, me^2, s, 0, me^2, 0]) + 
+      2*(me^2 + 3*mpi^2 - s - t)*C0[me^2, mpi^2, 2*me^2 + 2*mpi^2 - s - t, 
+        me^2, 0, mpi^2] - (4*mpi^2 - s)*C0[mpi^2, mpi^2, s, 0, mpi^2, 0] + 
+      s*(-me^2 - 3*mpi^2 + s + t)*D0[me^2, me^2, mpi^2, mpi^2, s, 
+        2*me^2 + 2*mpi^2 - s - t, 0, me^2, 0, mpi^2]))/
+    (me^4 + mpi^4 - 2*mpi^2*t - 2*me^2*(mpi^2 + t) + t*(s + t)) - 
+   (2*me^2*(me^2 - t)*((2*me^2 + 2*mpi^2 - s - 2*t)*C0[me^2, me^2, s, 0, 
+        me^2, 0] + 2*(-me^2 + mpi^2 + t)*C0[me^2, mpi^2, t, me^2, 0, mpi^2] - 
+      4*mpi^2*C0[mpi^2, mpi^2, s, 0, mpi^2, 0] + 
+      s*C0[mpi^2, mpi^2, s, 0, mpi^2, 0] + 
+      me^2*s*D0[me^2, me^2, mpi^2, mpi^2, s, t, 0, me^2, 0, mpi^2] - 
+      mpi^2*s*D0[me^2, me^2, mpi^2, mpi^2, s, t, 0, me^2, 0, mpi^2] - 
+      s*t*D0[me^2, me^2, mpi^2, mpi^2, s, t, 0, me^2, 0, mpi^2]))/
+    (me^4 + mpi^4 - 2*mpi^2*t - 2*me^2*(mpi^2 + t) + t*(s + t)))*SMP["e"]^4)/
+ (16*me*Pi^2)

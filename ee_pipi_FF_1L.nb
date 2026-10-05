@@ -10,16 +10,16 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     38263,        897]
-NotebookOptionsPosition[     33080,        832]
-NotebookOutlinePosition[     33422,        847]
-CellTagsIndexPosition[     33379,        844]
+NotebookDataLength[     38186,        895]
+NotebookOptionsPosition[     33004,        830]
+NotebookOutlinePosition[     33346,        845]
+CellTagsIndexPosition[     33303,        842]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell["Tensor Decomposition for e+e- \[LongRightArrow] \[Pi]+\[Pi]- at One \
-Loop", "Title",ExpressionUUID->"d51470bb-7ff4-4ab1-abbd-193f1624b583"],
+Loop", "Title",ExpressionUUID->"a12cf33b-4d8b-4cc3-84e7-22b10b6c444d"],
 
 Cell["\<\
 Same process and same basis as the tree-level notebook (ee_pipi_FF_Tree.nb), \
@@ -30,9 +30,9 @@ with TID, solving G.F = B as at tree level; (B) tensor-reduce the open \
 amplitude first and read the two coefficients off directly with the Dirac \
 equation, so no Gram matrix has to be inverted. Both are then reduced to \
 scalar Passarino-Veltman functions A0, B0, C0, D0 and compared.\
-\>", "Text",ExpressionUUID->"966e3f36-d70e-4027-8901-c7648cf00230"],
+\>", "Text",ExpressionUUID->"84ca62df-e710-4619-88f5-415fb2b97949"],
 
-Cell["1. Packages", "Section",ExpressionUUID->"871605e1-9cb3-4166-801e-9802faf2e66e"],
+Cell["1. Packages", "Section",ExpressionUUID->"b3bcd2f0-28a9-4036-8f9d-8782811ff7f6"],
 
 Cell[BoxData[{
  RowBox[{
@@ -42,24 +42,18 @@ Cell[BoxData[{
    RowBox[{"{", "\"\<FeynArts\>\"", "}"}]}], ";"}], "\n", 
  RowBox[{
   RowBox[{"Get", "[", "\"\<FeynCalc`\>\"", "]"}], ";"}]}], "Input",ExpressionU\
-UID->"aba9b84e-2c12-4571-a635-30791fba63fc"],
+UID->"3ef3485e-5eda-4811-a302-1ded37652a70"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"$FAVerbose", " ", "=", " ", "0"}], ";"}]], "Input",ExpressionUUID->\
-"0c97872a-6a5f-4aed-a6c7-aa092fe2ce31"],
+"0eed9b8b-2c98-448e-9721-ec6cce6aaa2f"],
 
-Cell["2. Kinematics", "Section",ExpressionUUID->"527b43a2-114e-4985-8b8e-6f302006e254"],
+Cell["2. Kinematics", "Section",ExpressionUUID->"1a0b42dd-1b09-4c04-9fa0-70fb21e7f677"],
 
 Cell[BoxData[{
  RowBox[{
   RowBox[{"FCClearScalarProducts", "[", "]"}], ";"}], "\n", 
- RowBox[{
-  RowBox[{"me", " ", "=", " ", 
-   RowBox[{"SMP", "[", "\"\<m_e\>\"", "]"}]}], ";"}], "\n", 
- RowBox[{
-  RowBox[{"mpi", " ", "=", " ", 
-   RowBox[{"SMP", "[", "\"\<m_pi\>\"", "]"}]}], ";"}], "\n", 
  RowBox[{
   RowBox[{"SetMandelstam", "[", 
    RowBox[{"s", ",", " ", "t", ",", " ", 
@@ -78,9 +72,9 @@ Cell[BoxData[{
     RowBox[{"s", " ", ">", " ", "0"}], " ", "&&", " ", 
     RowBox[{"me", " ", ">", " ", "0"}], " ", "&&", " ", 
     RowBox[{"mpi", " ", ">", " ", "0"}]}]}], ";"}]}], "Input",ExpressionUUID->\
-"626bac12-f54b-4fef-89ca-5f172b02a972"],
+"d1f0b085-ac4e-4f5a-9b8e-8262b864f1e8"],
 
-Cell["3. One-loop diagrams", "Section",ExpressionUUID->"6eba79ea-49fd-4ee1-8855-b3aa45ff522e"],
+Cell["3. One-loop diagrams", "Section",ExpressionUUID->"2975accb-f934-401e-92d0-1f3e6aee0ec3"],
 
 Cell["\<\
 Scalar QED is again obtained from the FeynArts SM model by keeping only the \
@@ -92,7 +86,7 @@ by current conservation) and, via ExcludeTopologies, tadpoles and \
 external-leg corrections. The latter means this is the bare, unrenormalised \
 1PI amplitude: UV poles do not cancel and would be removed by on-shell \
 counterterms.\
-\>", "Text",ExpressionUUID->"11100152-2c2e-4310-b95a-042c98e915cf"],
+\>", "Text",ExpressionUUID->"96622cbe-5437-48ed-a2a4-b92d9fc3b807"],
 
 Cell[BoxData[{
  RowBox[{
@@ -169,15 +163,15 @@ Cell[BoxData[{
     RowBox[{"ImageSize", " ", "->", " ", 
      RowBox[{"{", 
       RowBox[{"900", ",", " ", "360"}], "}"}]}]}], "]"}], ";"}]}], "Input",Exp\
-ressionUUID->"e917f826-0b9b-4344-8250-befeced7a9f4"],
+ressionUUID->"32e4089c-aada-4deb-a022-f097a83347fc"],
 
-Cell["4. Amplitudes", "Section",ExpressionUUID->"2b2bfdc4-e71c-4353-84c6-458a6da0966a"],
+Cell["4. Amplitudes", "Section",ExpressionUUID->"df8a4ac9-d475-4903-8573-0d2cb624f3f5"],
 
 Cell["\<\
 The amplitudes are kept as a list, one per diagram, in D dimensions with loop \
 momentum q. Each diagram is labelled by the masses of the propagators that \
 carry q, which identifies its class unambiguously.\
-\>", "Text",ExpressionUUID->"465b5143-b1a4-4daf-82b6-cfc2a59e72c8"],
+\>", "Text",ExpressionUUID->"889b9fe6-080d-4420-858d-6f917a384354"],
 
 Cell[BoxData[{
  RowBox[{
@@ -202,7 +196,11 @@ Cell[BoxData[{
      RowBox[{"FinalSubstitutions", " ", "->", " ", 
       RowBox[{"{", 
        RowBox[{
-        RowBox[{"SMP", "[", "\"\<m_W\>\"", "]"}], " ", "->", " ", "mpi"}], 
+        RowBox[{
+         RowBox[{"SMP", "[", "\"\<m_W\>\"", "]"}], " ", "->", " ", "mpi"}], ",",
+         " ", 
+        RowBox[{
+         RowBox[{"SMP", "[", "\"\<m_e\>\"", "]"}], " ", "->", " ", "me"}]}], 
        "}"}]}]}], "]"}]}], ";"}], "\n", 
  RowBox[{
   RowBox[{"nDiag", " ", "=", " ", 
@@ -285,16 +283,16 @@ Cell[BoxData[{
       RowBox[{"{", 
        RowBox[{"\"\<diagram\>\"", ",", " ", "\"\<loop propagator masses\>\"", 
         ",", " ", "\"\<class\>\""}], "}"}]}], "}"}]}]}], "]"}]}], "Input",Expr\
-essionUUID->"3f200442-5367-40fd-a845-3a332362619d"],
+essionUUID->"2de14ca9-00b6-4c16-9883-9084ec2d3673"],
 
-Cell["5. Basis and Gram matrix in D dimensions", "Section",ExpressionUUID->"2750b9f3-3213-4239-b90d-948d584fa612"],
+Cell["5. Basis and Gram matrix in D dimensions", "Section",ExpressionUUID->"e1f609df-6573-46c1-b934-60abc19bbe88"],
 
 Cell["\<\
 The same two structures as at tree level, built from D-dimensional spinors \
 and gamma matrices (SpinorVBarD, SpinorUD, GSD) since the amplitude is in D \
 dimensions. The Gram matrix carries no explicit D because no index \
 contraction occurs in it.\
-\>", "Text",ExpressionUUID->"50accdac-14e5-4716-9a2e-28f0cf1d9ae4"],
+\>", "Text",ExpressionUUID->"5382e949-f7f8-4c30-a4bb-f839b5b26a43"],
 
 Cell[BoxData[{
  RowBox[{
@@ -341,9 +339,9 @@ Cell[BoxData[{
         RowBox[{"Length", "[", "basis", "]"}]}], "}"}]}], "]"}], "]"}]}], 
   ";"}], "\n", 
  RowBox[{"G", " ", "//", " ", "MatrixForm"}]}], "Input",ExpressionUUID->\
-"b09dd121-837c-4fa2-9d72-e9ad8bfa0b7b"],
+"c147136f-3fc6-4d50-bc9b-5894571a1fd1"],
 
-Cell["6. Route A: project, then reduce the loop integrals", "Section",ExpressionUUID->"e79bc4c0-2deb-4e47-bc4d-1dca711d1c7b"],
+Cell["6. Route A: project, then reduce the loop integrals", "Section",ExpressionUUID->"fac756ed-0a60-4bd0-993c-765cd74f8f43"],
 
 Cell["\<\
 B_i = \[Sum]_spins T_i^* M is a Dirac trace containing the loop momentum. TID \
@@ -352,7 +350,7 @@ tensor coefficient functions (C1, C12, D001, ...) instead of reducing \
 everything to scalar integrals at once, which keeps the expressions small and \
 avoids inverse Gram determinants at this stage. The remaining tree-level \
 photon propagator 1/(p1+p2)^2 is made explicit afterwards.\
-\>", "Text",ExpressionUUID->"735567b1-559d-4f44-8d5c-0c2f4a73c462"],
+\>", "Text",ExpressionUUID->"f84f8ed1-eee4-43f1-b837-0fe951cd6bda"],
 
 Cell[BoxData[{
  RowBox[{
@@ -393,8 +391,8 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"FA", " ", "=", " ", 
      RowBox[{"formFactorsA", " ", "/@", " ", "ampList"}]}], ";"}], "]"}], "[", 
-  RowBox[{"[", "1", "]"}], "]"}]}], "Input",ExpressionUUID->"e5f4f5ed-e393-\
-443e-98f8-947101c4a2e1"],
+  RowBox[{"[", "1", "]"}], "]"}]}], "Input",ExpressionUUID->"05cdfdb9-b309-\
+4839-a95b-32827444471c"],
 
 Cell["\<\
 Each diagram is then reduced to scalar integrals with PaVeReduce and written \
@@ -402,7 +400,7 @@ with the conventional heads A0, B0, C0, D0. This step is cheap here and makes \
 cancellations visible that are hidden in the tensor-coefficient basis: F2 of \
 the pion vertex correction, for instance, is a combination of C1, B0 and C0 \
 that is identically zero.\
-\>", "Text",ExpressionUUID->"91cbf074-dbea-44c8-901c-1d079c551c94"],
+\>", "Text",ExpressionUUID->"681b9c24-804d-4a35-b3ca-8856a6fb9b7c"],
 
 Cell[BoxData[
  RowBox[{
@@ -417,8 +415,8 @@ Cell[BoxData[
           RowBox[{"PaVeReduce", "[", "#", "]"}], "]"}], "]"}], " ", "&"}], ",",
         " ", "FA", ",", " ", 
        RowBox[{"{", "2", "}"}]}], "]"}]}], ";"}], "]"}], "[", 
-  RowBox[{"[", "1", "]"}], "]"}]], "Input",ExpressionUUID->"98b8b127-3119-\
-4617-b508-1ab6bfe55c4c"],
+  RowBox[{"[", "1", "]"}], "]"}]], "Input",ExpressionUUID->"8782cd65-d047-\
+4810-93cc-98acc013a1be"],
 
 Cell[BoxData[
  RowBox[{"TableForm", "[", 
@@ -442,8 +440,8 @@ Cell[BoxData[
       RowBox[{"{", 
        RowBox[{"\"\<diagram\>\"", ",", " ", "\"\<class\>\"", ",", 
         " ", "\"\<size F1\>\"", ",", " ", "\"\<size F2\>\""}], "}"}]}], 
-     "}"}]}]}], "]"}]], "Input",ExpressionUUID->"cb874ab8-3ac3-4ef7-afbe-\
-3f419bcc13ea"],
+     "}"}]}]}], "]"}]], "Input",ExpressionUUID->"d2139e5f-2779-430c-9154-\
+c3b758b8f058"],
 
 Cell["\<\
 F2 vanishes for every diagram that only corrects the photon propagator or the \
@@ -452,7 +450,7 @@ electron current by a vertex function whose (p3+p4) part drops out, so it \
 only rescales the tree structure. Only diagrams with a loop attached to the \
 electron line (electron vertex, seagull triangle, boxes) feed the \
 helicity-flip structure vbar u.\
-\>", "Text",ExpressionUUID->"477e2e05-985b-47fe-913c-acf6e8da706a"],
+\>", "Text",ExpressionUUID->"ba175b76-8286-4101-afc1-b4fb573a122d"],
 
 Cell[BoxData[{
  RowBox[{
@@ -477,7 +475,7 @@ Cell[BoxData[{
      RowBox[{"FAred", "[", 
       RowBox[{"[", 
        RowBox[{"vpPos", ",", " ", "1"}], "]"}], "]"}]}], "}"}], "]"}], 
-  "]"}]}], "Input",ExpressionUUID->"11892fe0-a6c1-49df-90dc-982ff8dfae0b"],
+  "]"}]}], "Input",ExpressionUUID->"6f136fec-a768-4de7-8792-db4084926cb7"],
 
 Cell[BoxData[{
  RowBox[{
@@ -490,17 +488,17 @@ Cell[BoxData[{
  RowBox[{"FAred", "[", 
   RowBox[{"[", 
    RowBox[{"evPos", ",", " ", "1"}], "]"}], "]"}]}], "Input",ExpressionUUID->\
-"3f45fb64-7aeb-419c-abb3-aaa73956d27b"],
+"cb7f6625-4edc-450b-8d31-b1f54207c866"],
 
 Cell[BoxData[
  RowBox[{"FAred", "[", 
   RowBox[{"[", 
    RowBox[{"evPos", ",", " ", "2"}], "]"}], "]"}]], "Input",ExpressionUUID->\
-"844dc411-d9a5-4486-bd5d-c7cacc370457"],
+"07388f07-5380-4e7d-9080-6eb03614032b"],
 
 Cell["\<\
 7. Route B: reduce the open amplitude, then use the Dirac equation\
-\>", "Section",ExpressionUUID->"d1e780d0-abfc-4ac8-b866-6d0c4177f3e7"],
+\>", "Section",ExpressionUUID->"360122cb-2b4a-4c3a-9978-f92b6d909450"],
 
 Cell["\<\
 Here TID acts on the amplitude with the spinor chain still open. After \
@@ -510,7 +508,7 @@ only the two basis structures survive, so F1 and F2 can be read off as \
 coefficients. No Gram matrix is needed. The seagull triangle is a good \
 illustration: before the Dirac equation its vector structure is vbar (2 \
 p2slash - p3slash - p4slash) u, which collapses entirely onto m_e vbar u.\
-\>", "Text",ExpressionUUID->"5839af0b-27cb-4eba-a2a6-a3e53c06b497"],
+\>", "Text",ExpressionUUID->"2bc161d7-8ba9-47ba-b20d-8499eeb3a5b3"],
 
 Cell[BoxData[{
  RowBox[{
@@ -539,7 +537,7 @@ Cell[BoxData[{
     RowBox[{"ampList", "[", 
      RowBox[{"[", "sgPos", "]"}], "]"}], "]"}]}], ";"}], "\n", 
  RowBox[{"structuresOf", "[", "seagull", "]"}]}], "Input",ExpressionUUID->\
-"f0f7fa08-a221-4dfa-b76d-6d12c08892b2"],
+"764d19f0-aece-4966-b54e-b6a52c948df8"],
 
 Cell[BoxData[
  RowBox[{"structuresOf", "[", 
@@ -549,8 +547,8 @@ Cell[BoxData[
      RowBox[{"{", 
       RowBox[{"p4", " ", "->", " ", 
        RowBox[{"p1", " ", "+", " ", "p2", " ", "-", " ", "p3"}]}], "}"}]}], 
-    "]"}], "]"}], "]"}]], "Input",ExpressionUUID->"8935fb56-09eb-4385-8051-\
-5e530f88a558"],
+    "]"}], "]"}], "]"}]], "Input",ExpressionUUID->"a1c059e8-f5ba-40b2-8be2-\
+9f39055d28f8"],
 
 Cell[BoxData[{
  RowBox[{
@@ -595,8 +593,8 @@ Cell[BoxData[{
    RowBox[{
     RowBox[{"FB", " ", "=", " ", 
      RowBox[{"formFactorsB", " ", "/@", " ", "ampList"}]}], ";"}], "]"}], "[", 
-  RowBox[{"[", "1", "]"}], "]"}]}], "Input",ExpressionUUID->"7ba38c26-7ad5-\
-4efe-84b9-28f76e4164e5"],
+  RowBox[{"[", "1", "]"}], "]"}]}], "Input",ExpressionUUID->"b381b7ae-5c5d-\
+4c21-bbe9-4d0767990476"],
 
 Cell["\<\
 Route B is about three times faster since no traces are taken. The two \
@@ -605,7 +603,7 @@ functions whose arguments are ordered differently in the two routes, and \
 relations among them (e.g. C1 in terms of B0 and C0) are not visible to \
 Simplify. After PaVeReduce, which rewrites everything in terms of scalar \
 functions, the difference vanishes diagram by diagram.\
-\>", "Text",ExpressionUUID->"0a12d118-89f2-4b32-8cb0-4ba77c67dd49"],
+\>", "Text",ExpressionUUID->"dd529f5e-b6cf-4f39-b1d4-6db509704f88"],
 
 Cell[BoxData[
  RowBox[{
@@ -616,9 +614,9 @@ Cell[BoxData[
    RowBox[{
     RowBox[{"{", 
      RowBox[{"0", ",", " ", "0"}], "}"}], ",", " ", "nDiag"}], 
-   "]"}]}]], "Input",ExpressionUUID->"156e1a8f-6ca1-4859-866d-5a0ef8e2ab5c"],
+   "]"}]}]], "Input",ExpressionUUID->"bd082f73-165d-4fc1-aad5-d51d7a64b6f4"],
 
-Cell["8. The one-loop form factors", "Section",ExpressionUUID->"66b9ecbc-3635-48fd-a91e-b0558b3f4c3e"],
+Cell["8. The one-loop form factors", "Section",ExpressionUUID->"baff31bb-a84c-48f9-8823-2cf8d2b78121"],
 
 Cell["\<\
 Total bare one-loop form factors, fully reduced to scalar integrals and \
@@ -627,14 +625,14 @@ appear: two tadpoles, five bubbles, six triangles and the two boxes. The C0 \
 and D0 functions with two massless photon propagators are IR divergent; in \
 dimensional regularisation their soft poles sit inside the PaVe symbols and \
 cancel against real emission.\
-\>", "Text",ExpressionUUID->"851b4ff3-a251-4f41-88b2-cb070b740b98"],
+\>", "Text",ExpressionUUID->"dadc72ac-a486-40e4-84f5-27d0a2c86efc"],
 
 Cell[BoxData[
  RowBox[{
   RowBox[{"F1L", " ", "=", " ", 
    RowBox[{"Simplify", "[", 
     RowBox[{"Total", "[", "FAred", "]"}], "]"}]}], ";"}]], "Input",ExpressionU\
-UID->"0777ac56-1a1b-4934-a57b-0426b46c5da4"],
+UID->"13d9868b-7ca5-4a4a-b4ee-710fad8603d1"],
 
 Cell[BoxData[{
  RowBox[{
@@ -650,10 +648,10 @@ Cell[BoxData[{
   ";"}], "\n", 
  RowBox[{"Length", "[", "scalarIntegrals", "]"}], "\n", 
  RowBox[{"Column", "[", "scalarIntegrals", "]"}]}], "Input",ExpressionUUID->\
-"036870cb-7937-4446-9140-17d54cff922b"],
+"a3100d82-c7fe-467f-9a54-c3585f0c16eb"],
 
 Cell[BoxData[
- RowBox[{"LeafCount", " ", "/@", " ", "F1L"}]], "Input",ExpressionUUID->"a36134f5-65b1-47db-bd05-f9c82865b2b0"],
+ RowBox[{"LeafCount", " ", "/@", " ", "F1L"}]], "Input",ExpressionUUID->"14e2c204-4ba6-4e24-8dd9-d3500b5d989d"],
 
 Cell["\<\
 F1, organised by scalar integral. The denominators show the two sources of \
@@ -661,7 +659,7 @@ spurious singularities of the Passarino-Veltman reduction: the Gram \
 determinant of the basis (same polynomial as at tree level) and the kinematic \
 factors s - 4m_e^2, s - 4m_\[Pi]^2 from the reduction of the tensor bubbles \
 and triangles.\
-\>", "Text",ExpressionUUID->"26aff812-84cd-4d3a-b184-d31a625cd7d6"],
+\>", "Text",ExpressionUUID->"6135a165-b2e9-493c-b2c1-4aed034d03a6"],
 
 Cell[BoxData[
  RowBox[{"Collect2", "[", 
@@ -672,14 +670,14 @@ Cell[BoxData[
     RowBox[{"A0", ",", " ", "B0", ",", " ", "C0", ",", " ", "D0"}], "}"}], ",",
     " ", 
    RowBox[{"Factoring", " ", "->", " ", "Factor"}]}], "]"}]], "Input",Expressi\
-onUUID->"a0383b4b-a364-4b41-afbb-6167ceb67a37"],
+onUUID->"26d1cbd3-210a-4eff-9aaa-bd163eb936d1"],
 
 Cell["\<\
 F2 is a helicity-flip amplitude: every term carries a factor m_e (the \
 A0(m_e^2) term because A0(m^2) is itself proportional to m^2), so F2 vanishes \
 for m_e -> 0 up to the mass logarithms inside the IR-sensitive C0 and D0. It \
 is UV finite, as it must be: no counterterm has the structure vbar u.\
-\>", "Text",ExpressionUUID->"cafb7583-2809-4bf9-b82d-4687a1ce8ce7"],
+\>", "Text",ExpressionUUID->"2131e599-a344-45c1-9375-69e0d6b1f5cd"],
 
 Cell[BoxData[
  RowBox[{"Collect2", "[", 
@@ -690,7 +688,7 @@ Cell[BoxData[
     RowBox[{"A0", ",", " ", "B0", ",", " ", "C0", ",", " ", "D0"}], "}"}], ",",
     " ", 
    RowBox[{"Factoring", " ", "->", " ", "Factor"}]}], "]"}]], "Input",Expressi\
-onUUID->"e4fc523e-6d19-4d39-b16b-9c7b9fb45f90"],
+onUUID->"244ab2d0-8c45-4d81-942c-d54a44b7bd39"],
 
 Cell[BoxData[{
  RowBox[{
@@ -709,7 +707,7 @@ Cell[BoxData[{
         RowBox[{"eps", ",", " ", "0", ",", " ", 
          RowBox[{"-", "1"}]}], "}"}]}], "]"}], "]"}], "]"}]}], ";"}], "\n", 
  RowBox[{"uvPole", " ", "/@", " ", "F1L"}]}], "Input",ExpressionUUID->\
-"a36a5d12-121a-40be-9810-7a2ecd7b99a8"],
+"08868668-4e87-4e00-a2b5-33513b6b9640"],
 
 Cell["\<\
 Relative to the tree-level F1 = -2e^2/s this is a UV pole of -e^2/(6 \[Pi]^2 \
@@ -718,7 +716,7 @@ measure. It is the pole of the unrenormalised 1PI amplitude: charge \
 renormalisation removes the vacuum-polarisation part and the vertex \
 counterterms, together with the external-leg corrections excluded above, \
 remove the rest. Per diagram class:\
-\>", "Text",ExpressionUUID->"b9197e8f-62c4-48d6-b750-39736f4a7baf"],
+\>", "Text",ExpressionUUID->"b0937588-e9b0-4a77-8122-8f6fab42e00c"],
 
 Cell[BoxData[
  RowBox[{"TableForm", "[", 
@@ -741,15 +739,15 @@ Cell[BoxData[
       RowBox[{"{", 
        RowBox[{"\"\<class\>\"", ",", " ", "\"\<UV pole F1\>\"", ",", 
         " ", "\"\<UV pole F2\>\""}], "}"}]}], "}"}]}]}], "]"}]], "Input",Expre\
-ssionUUID->"7b8f6eba-bc95-4105-ab4d-f7d184d201ec"],
+ssionUUID->"e793f397-4323-408e-9236-5c9950762dea"],
 
-Cell["9. Save", "Section",ExpressionUUID->"90159f92-f8f8-4566-887e-aad8dc06e516"],
+Cell["9. Save", "Section",ExpressionUUID->"ca5b7821-81c9-4e41-9dc3-f7449ef76dfd"],
 
 Cell["\<\
 The fully reduced one-loop form factors (scalar A0, B0, C0, D0 basis, \
 D-dimensional) are written into the folder ee_pipi next to the notebook, \
 alongside the tree-level results.\
-\>", "Text",ExpressionUUID->"a8d2ae5d-4129-4cfd-b49f-c82f57259757"],
+\>", "Text",ExpressionUUID->"a36237b5-a4ba-42e0-b555-05cb40a73d1c"],
 
 Cell[BoxData[{
  RowBox[{
@@ -787,9 +785,9 @@ Cell[BoxData[{
       RowBox[{"Length", "[", "basis", "]"}]}], "}"}]}], "]"}], ";"}], "\n", 
  RowBox[{"FileNames", "[", 
   RowBox[{"\"\<*\>\"", ",", " ", "outDir"}], "]"}]}], "Input",ExpressionUUID->\
-"f34e9f02-8793-47e3-baa6-ef83de70069a"],
+"800cfc05-6db1-4cde-ad4f-589d70fd7398"],
 
-Cell["10. Other ways to do this", "Section",ExpressionUUID->"0057f26a-7a39-40f7-8d1a-ab0119b3739d"],
+Cell["10. Other ways to do this", "Section",ExpressionUUID->"234e566b-b6f3-4334-be2d-b824626443d1"],
 
 Cell["\<\
 Passarino-Veltman (used here). TID with UsePaVeBasis followed by PaVeReduce \
@@ -799,7 +797,7 @@ the thresholds and at the boundary of phase space, which cause numerical \
 cancellations. For numerics one would evaluate the A0...D0 with LoopTools or \
 Collier (FeynHelpers provides LToolsEvaluate), or expand them analytically in \
 eps with Package-X (LoopRefine).\
-\>", "Text",ExpressionUUID->"bcd30b78-9d92-48a1-9be5-03072e6dbc49"],
+\>", "Text",ExpressionUUID->"4190d31f-0e48-4df2-9661-c04b0ca9d470"],
 
 Cell["\<\
 Projectors plus IBP reduction. Route A computes the projections B_i = \
@@ -811,7 +809,7 @@ masters is small (here the same fifteen as above, but chosen so that no Gram \
 determinants appear in the coefficients), the method extends directly to two \
 loops, and the masters can be evaluated with differential equations or \
 numerically (pySecDec, AMFlow).\
-\>", "Text",ExpressionUUID->"0230d282-9d8a-4284-8505-fe0d07abf32a"],
+\>", "Text",ExpressionUUID->"1eb4b1d0-734c-460e-9867-e61c4347a2ac"],
 
 Cell["\<\
 Helicity amplitudes. Instead of form factors one can evaluate the helicity \
@@ -819,7 +817,7 @@ amplitudes directly in the spinor-helicity formalism (S@M, SpinorsExtras), as \
 done in the \[Pi]\[Pi]\[Gamma] notebook. For a 2 -> 2 process with two \
 structures the form-factor language is simpler, but for ee -> \[Pi]\[Pi]\
 \[Gamma] (eight structures) helicity amplitudes avoid an 8 x 8 Gram matrix.\
-\>", "Text",ExpressionUUID->"79e076a8-bd6a-476a-8aff-bdcdee46b46d"],
+\>", "Text",ExpressionUUID->"74478b9d-1cc3-4261-b653-d1ccc5be4603"],
 
 Cell["\<\
 Scheme remarks. The basis here is D-dimensional (CDR). In the 't \
@@ -828,12 +826,12 @@ four-dimensional and only the loop is continued; the projectors are then \
 D-dimensional only in the traces, and F1, F2 differ by finite rational terms \
 that cancel in physical quantities. For a massive QED process without \
 \[Gamma]5 there is no scheme ambiguity in the Dirac algebra itself.\
-\>", "Text",ExpressionUUID->"3d094abe-a618-4db3-b343-3bf335438228"]
+\>", "Text",ExpressionUUID->"bb9e7c0f-30e5-4bd0-b27b-e97656622d0a"]
 },
 WindowSize->{1200, 850},
 FrontEndVersion->"14.3 for Mac OS X ARM (64-bit) (July 8, 2025)",
 StyleDefinitions->"Default.nb",
-ExpressionUUID->"c0526eba-5664-4355-9f82-0567fdf7647a"
+ExpressionUUID->"d9c051ae-e89c-49f2-a984-4b7dc12357ab"
 ]
 (* End of Notebook Content *)
 
@@ -846,59 +844,59 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[554, 20, 146, 1, 70, "Title",ExpressionUUID->"d51470bb-7ff4-4ab1-abbd-193f1624b583"],
-Cell[703, 23, 679, 9, 70, "Text",ExpressionUUID->"966e3f36-d70e-4027-8901-c7648cf00230"],
-Cell[1385, 34, 85, 0, 70, "Section",ExpressionUUID->"871605e1-9cb3-4166-801e-9802faf2e66e"],
-Cell[1473, 36, 347, 8, 70, "Input",ExpressionUUID->"aba9b84e-2c12-4571-a635-30791fba63fc"],
-Cell[1823, 46, 143, 3, 70, "Input",ExpressionUUID->"0c97872a-6a5f-4aed-a6c7-aa092fe2ce31"],
-Cell[1969, 51, 87, 0, 70, "Section",ExpressionUUID->"527b43a2-114e-4985-8b8e-6f302006e254"],
-Cell[2059, 53, 1066, 27, 70, "Input",ExpressionUUID->"626bac12-f54b-4fef-89ca-5f172b02a972"],
-Cell[3128, 82, 94, 0, 70, "Section",ExpressionUUID->"6eba79ea-49fd-4ee1-8855-b3aa45ff522e"],
-Cell[3225, 84, 694, 10, 70, "Text",ExpressionUUID->"11100152-2c2e-4310-b95a-042c98e915cf"],
-Cell[3922, 96, 2948, 75, 70, "Input",ExpressionUUID->"e917f826-0b9b-4344-8250-befeced7a9f4"],
-Cell[6873, 173, 87, 0, 70, "Section",ExpressionUUID->"2b2bfdc4-e71c-4353-84c6-458a6da0966a"],
-Cell[6963, 175, 286, 4, 70, "Text",ExpressionUUID->"465b5143-b1a4-4daf-82b6-cfc2a59e72c8"],
-Cell[7252, 181, 4214, 106, 70, "Input",ExpressionUUID->"3f200442-5367-40fd-a845-3a332362619d"],
-Cell[11469, 289, 114, 0, 70, "Section",ExpressionUUID->"2750b9f3-3213-4239-b90d-948d584fa612"],
-Cell[11586, 291, 328, 5, 70, "Text",ExpressionUUID->"50accdac-14e5-4716-9a2e-28f0cf1d9ae4"],
-Cell[11917, 298, 1595, 45, 70, "Input",ExpressionUUID->"b09dd121-837c-4fa2-9d72-e9ad8bfa0b7b"],
-Cell[13515, 345, 125, 0, 70, "Section",ExpressionUUID->"e79bc4c0-2deb-4e47-bc4d-1dca711d1c7b"],
-Cell[13643, 347, 518, 7, 70, "Text",ExpressionUUID->"735567b1-559d-4f44-8d5c-0c2f4a73c462"],
-Cell[14164, 356, 1488, 40, 70, "Input",ExpressionUUID->"e5f4f5ed-e393-443e-98f8-947101c4a2e1"],
-Cell[15655, 398, 420, 6, 70, "Text",ExpressionUUID->"91cbf074-dbea-44c8-901c-1d079c551c94"],
-Cell[16078, 406, 508, 14, 70, "Input",ExpressionUUID->"98b8b127-3119-4617-b508-1ab6bfe55c4c"],
-Cell[16589, 422, 889, 23, 70, "Input",ExpressionUUID->"cb874ab8-3ac3-4ef7-afbe-3f419bcc13ea"],
-Cell[17481, 447, 484, 7, 70, "Text",ExpressionUUID->"477e2e05-985b-47fe-913c-acf6e8da706a"],
-Cell[17968, 456, 848, 23, 70, "Input",ExpressionUUID->"11892fe0-a6c1-49df-90dc-982ff8dfae0b"],
-Cell[18819, 481, 422, 11, 70, "Input",ExpressionUUID->"3f45fb64-7aeb-419c-abb3-aaa73956d27b"],
-Cell[19244, 494, 171, 4, 70, "Input",ExpressionUUID->"844dc411-d9a5-4486-bd5d-c7cacc370457"],
-Cell[19418, 500, 148, 2, 70, "Section",ExpressionUUID->"d1e780d0-abfc-4ac8-b866-6d0c4177f3e7"],
-Cell[19569, 504, 597, 8, 70, "Text",ExpressionUUID->"5839af0b-27cb-4eba-a2a6-a3e53c06b497"],
-Cell[20169, 514, 999, 27, 70, "Input",ExpressionUUID->"f0f7fa08-a221-4dfa-b76d-6d12c08892b2"],
-Cell[21171, 543, 373, 9, 70, "Input",ExpressionUUID->"8935fb56-09eb-4385-8051-5e530f88a558"],
-Cell[21547, 554, 1701, 44, 70, "Input",ExpressionUUID->"7ba38c26-7ad5-4efe-84b9-28f76e4164e5"],
-Cell[23251, 600, 508, 7, 70, "Text",ExpressionUUID->"0a12d118-89f2-4b32-8cb0-4ba77c67dd49"],
-Cell[23762, 609, 359, 9, 70, "Input",ExpressionUUID->"156e1a8f-6ca1-4859-866d-5a0ef8e2ab5c"],
-Cell[24124, 620, 102, 0, 70, "Section",ExpressionUUID->"66b9ecbc-3635-48fd-a91e-b0558b3f4c3e"],
-Cell[24229, 622, 494, 7, 70, "Text",ExpressionUUID->"851b4ff3-a251-4f41-88b2-cb070b740b98"],
-Cell[24726, 631, 210, 5, 70, "Input",ExpressionUUID->"0777ac56-1a1b-4934-a57b-0426b46c5da4"],
-Cell[24939, 638, 551, 14, 70, "Input",ExpressionUUID->"036870cb-7937-4446-9140-17d54cff922b"],
-Cell[25493, 654, 125, 1, 70, "Input",ExpressionUUID->"a36134f5-65b1-47db-bd05-f9c82865b2b0"],
-Cell[25621, 657, 398, 6, 70, "Text",ExpressionUUID->"26aff812-84cd-4d3a-b184-d31a625cd7d6"],
-Cell[26022, 665, 357, 9, 70, "Input",ExpressionUUID->"a0383b4b-a364-4b41-afbb-6167ceb67a37"],
-Cell[26382, 676, 379, 5, 70, "Text",ExpressionUUID->"cafb7583-2809-4bf9-b82d-4687a1ce8ce7"],
-Cell[26764, 683, 357, 9, 70, "Input",ExpressionUUID->"e4fc523e-6d19-4d39-b16b-9c7b9fb45f90"],
-Cell[27124, 694, 667, 17, 70, "Input",ExpressionUUID->"a36a5d12-121a-40be-9810-7a2ecd7b99a8"],
-Cell[27794, 713, 487, 7, 70, "Text",ExpressionUUID->"b9197e8f-62c4-48d6-b750-39736f4a7baf"],
-Cell[28284, 722, 792, 21, 70, "Input",ExpressionUUID->"7b8f6eba-bc95-4105-ab4d-f7d184d201ec"],
-Cell[29079, 745, 81, 0, 70, "Section",ExpressionUUID->"90159f92-f8f8-4566-887e-aad8dc06e516"],
-Cell[29163, 747, 259, 4, 70, "Text",ExpressionUUID->"a8d2ae5d-4129-4cfd-b49f-c82f57259757"],
-Cell[29425, 753, 1297, 36, 70, "Input",ExpressionUUID->"f34e9f02-8793-47e3-baa6-ef83de70069a"],
-Cell[30725, 791, 99, 0, 70, "Section",ExpressionUUID->"0057f26a-7a39-40f7-8d1a-ab0119b3739d"],
-Cell[30827, 793, 577, 8, 70, "Text",ExpressionUUID->"bcd30b78-9d92-48a1-9be5-03072e6dbc49"],
-Cell[31407, 803, 702, 10, 70, "Text",ExpressionUUID->"0230d282-9d8a-4284-8505-fe0d07abf32a"],
-Cell[32112, 815, 458, 6, 70, "Text",ExpressionUUID->"79e076a8-bd6a-476a-8aff-bdcdee46b46d"],
-Cell[32573, 823, 503, 7, 70, "Text",ExpressionUUID->"3d094abe-a618-4db3-b343-3bf335438228"]
+Cell[554, 20, 146, 1, 70, "Title",ExpressionUUID->"a12cf33b-4d8b-4cc3-84e7-22b10b6c444d"],
+Cell[703, 23, 679, 9, 70, "Text",ExpressionUUID->"84ca62df-e710-4619-88f5-415fb2b97949"],
+Cell[1385, 34, 85, 0, 70, "Section",ExpressionUUID->"b3bcd2f0-28a9-4036-8f9d-8782811ff7f6"],
+Cell[1473, 36, 347, 8, 70, "Input",ExpressionUUID->"3ef3485e-5eda-4811-a302-1ded37652a70"],
+Cell[1823, 46, 143, 3, 70, "Input",ExpressionUUID->"0eed9b8b-2c98-448e-9721-ec6cce6aaa2f"],
+Cell[1969, 51, 87, 0, 70, "Section",ExpressionUUID->"1a0b42dd-1b09-4c04-9fa0-70fb21e7f677"],
+Cell[2059, 53, 858, 21, 70, "Input",ExpressionUUID->"d1f0b085-ac4e-4f5a-9b8e-8262b864f1e8"],
+Cell[2920, 76, 94, 0, 70, "Section",ExpressionUUID->"2975accb-f934-401e-92d0-1f3e6aee0ec3"],
+Cell[3017, 78, 694, 10, 70, "Text",ExpressionUUID->"96622cbe-5437-48ed-a2a4-b92d9fc3b807"],
+Cell[3714, 90, 2948, 75, 70, "Input",ExpressionUUID->"32e4089c-aada-4deb-a022-f097a83347fc"],
+Cell[6665, 167, 87, 0, 70, "Section",ExpressionUUID->"df8a4ac9-d475-4903-8573-0d2cb624f3f5"],
+Cell[6755, 169, 286, 4, 70, "Text",ExpressionUUID->"889b9fe6-080d-4420-858d-6f917a384354"],
+Cell[7044, 175, 4346, 110, 70, "Input",ExpressionUUID->"2de14ca9-00b6-4c16-9883-9084ec2d3673"],
+Cell[11393, 287, 114, 0, 70, "Section",ExpressionUUID->"e1f609df-6573-46c1-b934-60abc19bbe88"],
+Cell[11510, 289, 328, 5, 70, "Text",ExpressionUUID->"5382e949-f7f8-4c30-a4bb-f839b5b26a43"],
+Cell[11841, 296, 1595, 45, 70, "Input",ExpressionUUID->"c147136f-3fc6-4d50-bc9b-5894571a1fd1"],
+Cell[13439, 343, 125, 0, 70, "Section",ExpressionUUID->"fac756ed-0a60-4bd0-993c-765cd74f8f43"],
+Cell[13567, 345, 518, 7, 70, "Text",ExpressionUUID->"f84f8ed1-eee4-43f1-b837-0fe951cd6bda"],
+Cell[14088, 354, 1488, 40, 70, "Input",ExpressionUUID->"05cdfdb9-b309-4839-a95b-32827444471c"],
+Cell[15579, 396, 420, 6, 70, "Text",ExpressionUUID->"681b9c24-804d-4a35-b3ca-8856a6fb9b7c"],
+Cell[16002, 404, 508, 14, 70, "Input",ExpressionUUID->"8782cd65-d047-4810-93cc-98acc013a1be"],
+Cell[16513, 420, 889, 23, 70, "Input",ExpressionUUID->"d2139e5f-2779-430c-9154-c3b758b8f058"],
+Cell[17405, 445, 484, 7, 70, "Text",ExpressionUUID->"ba175b76-8286-4101-afc1-b4fb573a122d"],
+Cell[17892, 454, 848, 23, 70, "Input",ExpressionUUID->"6f136fec-a768-4de7-8792-db4084926cb7"],
+Cell[18743, 479, 422, 11, 70, "Input",ExpressionUUID->"cb7f6625-4edc-450b-8d31-b1f54207c866"],
+Cell[19168, 492, 171, 4, 70, "Input",ExpressionUUID->"07388f07-5380-4e7d-9080-6eb03614032b"],
+Cell[19342, 498, 148, 2, 70, "Section",ExpressionUUID->"360122cb-2b4a-4c3a-9978-f92b6d909450"],
+Cell[19493, 502, 597, 8, 70, "Text",ExpressionUUID->"2bc161d7-8ba9-47ba-b20d-8499eeb3a5b3"],
+Cell[20093, 512, 999, 27, 70, "Input",ExpressionUUID->"764d19f0-aece-4966-b54e-b6a52c948df8"],
+Cell[21095, 541, 373, 9, 70, "Input",ExpressionUUID->"a1c059e8-f5ba-40b2-8be2-9f39055d28f8"],
+Cell[21471, 552, 1701, 44, 70, "Input",ExpressionUUID->"b381b7ae-5c5d-4c21-bbe9-4d0767990476"],
+Cell[23175, 598, 508, 7, 70, "Text",ExpressionUUID->"dd529f5e-b6cf-4f39-b1d4-6db509704f88"],
+Cell[23686, 607, 359, 9, 70, "Input",ExpressionUUID->"bd082f73-165d-4fc1-aad5-d51d7a64b6f4"],
+Cell[24048, 618, 102, 0, 70, "Section",ExpressionUUID->"baff31bb-a84c-48f9-8823-2cf8d2b78121"],
+Cell[24153, 620, 494, 7, 70, "Text",ExpressionUUID->"dadc72ac-a486-40e4-84f5-27d0a2c86efc"],
+Cell[24650, 629, 210, 5, 70, "Input",ExpressionUUID->"13d9868b-7ca5-4a4a-b4ee-710fad8603d1"],
+Cell[24863, 636, 551, 14, 70, "Input",ExpressionUUID->"a3100d82-c7fe-467f-9a54-c3585f0c16eb"],
+Cell[25417, 652, 125, 1, 70, "Input",ExpressionUUID->"14e2c204-4ba6-4e24-8dd9-d3500b5d989d"],
+Cell[25545, 655, 398, 6, 70, "Text",ExpressionUUID->"6135a165-b2e9-493c-b2c1-4aed034d03a6"],
+Cell[25946, 663, 357, 9, 70, "Input",ExpressionUUID->"26d1cbd3-210a-4eff-9aaa-bd163eb936d1"],
+Cell[26306, 674, 379, 5, 70, "Text",ExpressionUUID->"2131e599-a344-45c1-9375-69e0d6b1f5cd"],
+Cell[26688, 681, 357, 9, 70, "Input",ExpressionUUID->"244ab2d0-8c45-4d81-942c-d54a44b7bd39"],
+Cell[27048, 692, 667, 17, 70, "Input",ExpressionUUID->"08868668-4e87-4e00-a2b5-33513b6b9640"],
+Cell[27718, 711, 487, 7, 70, "Text",ExpressionUUID->"b0937588-e9b0-4a77-8122-8f6fab42e00c"],
+Cell[28208, 720, 792, 21, 70, "Input",ExpressionUUID->"e793f397-4323-408e-9236-5c9950762dea"],
+Cell[29003, 743, 81, 0, 70, "Section",ExpressionUUID->"ca5b7821-81c9-4e41-9dc3-f7449ef76dfd"],
+Cell[29087, 745, 259, 4, 70, "Text",ExpressionUUID->"a36237b5-a4ba-42e0-b555-05cb40a73d1c"],
+Cell[29349, 751, 1297, 36, 70, "Input",ExpressionUUID->"800cfc05-6db1-4cde-ad4f-589d70fd7398"],
+Cell[30649, 789, 99, 0, 70, "Section",ExpressionUUID->"234e566b-b6f3-4334-be2d-b824626443d1"],
+Cell[30751, 791, 577, 8, 70, "Text",ExpressionUUID->"4190d31f-0e48-4df2-9661-c04b0ca9d470"],
+Cell[31331, 801, 702, 10, 70, "Text",ExpressionUUID->"1eb4b1d0-734c-460e-9867-e61c4347a2ac"],
+Cell[32036, 813, 458, 6, 70, "Text",ExpressionUUID->"74478b9d-1cc3-4261-b653-d1ccc5be4603"],
+Cell[32497, 821, 503, 7, 70, "Text",ExpressionUUID->"bb9e7c0f-30e5-4bd0-b27b-e97656622d0a"]
 }
 ]
 *)
