@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     12623,        252]
-NotebookOptionsPosition[     10134,        216]
-NotebookOutlinePosition[     10450,        230]
-CellTagsIndexPosition[     10407,        227]
+NotebookDataLength[     14627,        287]
+NotebookOptionsPosition[     11759,        247]
+NotebookOutlinePosition[     12075,        261]
+CellTagsIndexPosition[     12032,        258]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -30,7 +30,9 @@ G_ij = \[Sum]_spins T_i T_j^* does not depend on spinor phases or \
 conventions, so CEEX's tensors summed over the four helicities must reproduce \
 ee_pipi/Gram_Matrix.m at the same phase-space point. Step 2, per helicity \
 (section 4): CEEX's spinor construction rebuilt here, compared helicity by \
-helicity with phases. Plain Mathematica, no FeynCalc.\
+helicity with phases. Step 3, polarised amplitudes (section 5): the \
+per-helicity amplitudes saved by ee_pipi_FF_Tree.nb against CEEX's \
+amp_pipi_LO. Plain Mathematica, no FeynCalc.\
 \>", "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
 
 Cell["1. The CEEX point", "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
@@ -212,7 +214,36 @@ mdot[Px[[1]], Px[[1]]],
      m32 -> mdot[Px[[3]], Px[[3]]], s -> mdot[Px[[1]] + Px[[2]], Px[[1]] + \
 Px[[2]]], t -> mdot[Px[[1]] - Px[[3]], Px[[1]] - Px[[3]]]}];
 N[Max[Abs[Flatten[Gx - GNBx]/Flatten[GNBx]]]]\
-\>", "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"]
+\>", "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"],
+
+Cell["5. Polarised amplitudes against CEEX", "Section",ExpressionUUID->"fb114d98-58b9-415c-914c-b9dcb0141fec"],
+
+Cell["\<\
+ee_pipi_FF_Tree.nb (section 6) saves M(\[Lambda]a, \[Lambda]b) = F1 vbar(p1) \
+p3slash u(p2) + F2 vbar(p1) u(p2) per helicity on CEEX's spinors, as \
+ee_pipi/Amp_Tree_<\[Lambda]a><\[Lambda]b>.m. CEEX's amp_pipi_LO is FF_LO.T \
+with T on ubar(p2)...v(p1), the complex conjugate basis: so M = (CEEX \
+amplitude)^* per helicity, e = 1. Evaluated at the CEEX point (cos\[Theta] = \
+3/10, \[Phi] = 2/5).\
+\>", "Text",ExpressionUUID->"b198fd08-831e-4424-b72f-f896e7b5190b"],
+
+Cell["\<\
+ampFile[{la_, lb_}] := Get[FileNameJoin[{dir, \"Amp_Tree_\" <> If[la == 1, \
+\"p\", \"m\"] <> If[lb == 1, \"p\", \"m\"] <> \".m\"}]];
+ampAt[h_] := Block[{s, m12, m32, th, ph}, ampFile[h] /. {SMP[\"e\"] -> 1, s \
+-> Px[[1, 1]]^2 4, m12 -> (51099895/10^11)^2,
+     m32 -> (13957/10^5)^2, th -> ArcCos[3/10], ph -> 2/5}];
+ampCEEX[{la_, lb_}] := (-2/s) T[1, la, lb];   (* FF_LO = (-2/s34, 0) *)
+TableForm[Table[{h, N[ampAt[h], 10], ampCEEX[h], If[ampCEEX[h] == 0, 0, \
+N[Abs[ampAt[h]/Conjugate[ampCEEX[h]] - 1]]]}, {h, hels}],
+  TableHeadings -> {None, {\"{\[Lambda]a, \[Lambda]b}\", \"M (notebook)\", \
+\"CEEX amp_pipi_LO\", \"|M/CEEX^* - 1|\"}}]\
+\>", "Input",ExpressionUUID->"e444cd1e-54ca-4b57-a304-98010286e2f9"],
+
+Cell["\<\
+Result: M = CEEX^* in every helicity to ~10^-12, CEEX's double-precision \
+error of section 4.\
+\>", "Text",ExpressionUUID->"a5641859-7e28-4787-89ea-b714286a2a79"]
 },
 FrontEndVersion->"14.2 for Linux x86 (64-bit) (March 16, 2025)",
 StyleDefinitions->"Default.nb",
@@ -230,30 +261,34 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[554, 20, 169, 3, 70, "Title",ExpressionUUID->"a2317614-d243-4053-b720-af57d77c2095"],
-Cell[726, 25, 580, 8, 70, "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
-Cell[1309, 35, 91, 0, 70, "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
-Cell[1403, 37, 626, 9, 70, "Text",ExpressionUUID->"23bf2174-4d67-4a96-a9b5-dfe79e958ba0"],
-Cell[2032, 48, 278, 6, 70, "Input",ExpressionUUID->"199d89fc-955f-4b9c-bff8-31db77cc7d89"],
-Cell[2313, 56, 303, 4, 70, "Text",ExpressionUUID->"588e7817-699c-43c3-bd2c-9b410cdb289e"],
-Cell[2619, 62, 384, 7, 70, "Input",ExpressionUUID->"a3a221e5-e474-4c8c-9b03-b330445bdcd5"],
-Cell[3006, 71, 87, 0, 70, "Section",ExpressionUUID->"ff6659ba-b07f-4c58-92a1-c738e3bb9ddb"],
-Cell[3096, 73, 348, 5, 70, "Text",ExpressionUUID->"1d80e715-4f19-4abb-b7ed-84b4e32d2582"],
-Cell[3447, 80, 358, 7, 70, "Input",ExpressionUUID->"61aa8557-6d37-489e-b2b6-73ad4835cc7a"],
-Cell[3808, 89, 563, 8, 70, "Text",ExpressionUUID->"a460f74e-c670-4054-a572-6eb1d4d26695"],
-Cell[4374, 99, 90, 0, 70, "Section",ExpressionUUID->"539de5bd-3fc3-44d7-8fa7-8ada5bbc8dfa"],
-Cell[4467, 101, 225, 3, 70, "Text",ExpressionUUID->"75688fe6-4511-4212-8ef9-b5ccbcd2ef8f"],
-Cell[4695, 106, 248, 4, 70, "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"],
-Cell[4946, 112, 119, 0, 70, "Section",ExpressionUUID->"4099d38d-f56f-46dd-9e20-3ff093a2db5a"],
-Cell[5068, 114, 1001, 14, 70, "Text",ExpressionUUID->"bc8b195f-72ff-4f9b-a7c5-1c8f880cc65f"],
-Cell[6072, 130, 1146, 21, 70, "Input",ExpressionUUID->"210d131c-866c-4ce7-aed0-39160b522df6"],
-Cell[7221, 153, 207, 3, 70, "Text",ExpressionUUID->"a20bc7ac-5931-4fe1-8c10-76756efbfec6"],
-Cell[7431, 158, 419, 8, 70, "Input",ExpressionUUID->"7074ce22-6c09-41b7-a92e-d908a27f8c88"],
-Cell[7853, 168, 258, 4, 70, "Text",ExpressionUUID->"61204f97-9b5e-4936-8e2b-d12af9d0e4bc"],
-Cell[8114, 174, 553, 10, 70, "Input",ExpressionUUID->"c1430347-4036-4924-83e2-766adaa3d820"],
-Cell[8670, 186, 522, 7, 70, "Text",ExpressionUUID->"40dbc9de-ec9b-4eec-9097-48a05e2a0aa4"],
-Cell[9195, 195, 161, 3, 70, "Input",ExpressionUUID->"34adbff7-d496-4d8d-b742-dc32693f4075"],
-Cell[9359, 200, 279, 4, 70, "Text",ExpressionUUID->"1ef01660-17d7-42ed-996c-862b5c843a5d"],
-Cell[9641, 206, 489, 8, 70, "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"]
+Cell[726, 25, 710, 10, 70, "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
+Cell[1439, 37, 91, 0, 70, "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
+Cell[1533, 39, 626, 9, 70, "Text",ExpressionUUID->"23bf2174-4d67-4a96-a9b5-dfe79e958ba0"],
+Cell[2162, 50, 278, 6, 70, "Input",ExpressionUUID->"199d89fc-955f-4b9c-bff8-31db77cc7d89"],
+Cell[2443, 58, 303, 4, 70, "Text",ExpressionUUID->"588e7817-699c-43c3-bd2c-9b410cdb289e"],
+Cell[2749, 64, 384, 7, 70, "Input",ExpressionUUID->"a3a221e5-e474-4c8c-9b03-b330445bdcd5"],
+Cell[3136, 73, 87, 0, 70, "Section",ExpressionUUID->"ff6659ba-b07f-4c58-92a1-c738e3bb9ddb"],
+Cell[3226, 75, 348, 5, 70, "Text",ExpressionUUID->"1d80e715-4f19-4abb-b7ed-84b4e32d2582"],
+Cell[3577, 82, 358, 7, 70, "Input",ExpressionUUID->"61aa8557-6d37-489e-b2b6-73ad4835cc7a"],
+Cell[3938, 91, 563, 8, 70, "Text",ExpressionUUID->"a460f74e-c670-4054-a572-6eb1d4d26695"],
+Cell[4504, 101, 90, 0, 70, "Section",ExpressionUUID->"539de5bd-3fc3-44d7-8fa7-8ada5bbc8dfa"],
+Cell[4597, 103, 225, 3, 70, "Text",ExpressionUUID->"75688fe6-4511-4212-8ef9-b5ccbcd2ef8f"],
+Cell[4825, 108, 248, 4, 70, "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"],
+Cell[5076, 114, 119, 0, 70, "Section",ExpressionUUID->"4099d38d-f56f-46dd-9e20-3ff093a2db5a"],
+Cell[5198, 116, 1001, 14, 70, "Text",ExpressionUUID->"bc8b195f-72ff-4f9b-a7c5-1c8f880cc65f"],
+Cell[6202, 132, 1146, 21, 70, "Input",ExpressionUUID->"210d131c-866c-4ce7-aed0-39160b522df6"],
+Cell[7351, 155, 207, 3, 70, "Text",ExpressionUUID->"a20bc7ac-5931-4fe1-8c10-76756efbfec6"],
+Cell[7561, 160, 419, 8, 70, "Input",ExpressionUUID->"7074ce22-6c09-41b7-a92e-d908a27f8c88"],
+Cell[7983, 170, 258, 4, 70, "Text",ExpressionUUID->"61204f97-9b5e-4936-8e2b-d12af9d0e4bc"],
+Cell[8244, 176, 553, 10, 70, "Input",ExpressionUUID->"c1430347-4036-4924-83e2-766adaa3d820"],
+Cell[8800, 188, 522, 7, 70, "Text",ExpressionUUID->"40dbc9de-ec9b-4eec-9097-48a05e2a0aa4"],
+Cell[9325, 197, 161, 3, 70, "Input",ExpressionUUID->"34adbff7-d496-4d8d-b742-dc32693f4075"],
+Cell[9489, 202, 279, 4, 70, "Text",ExpressionUUID->"1ef01660-17d7-42ed-996c-862b5c843a5d"],
+Cell[9771, 208, 489, 8, 70, "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"],
+Cell[10263, 218, 110, 0, 70, "Section",ExpressionUUID->"fb114d98-58b9-415c-914c-b9dcb0141fec"],
+Cell[10376, 220, 477, 7, 70, "Text",ExpressionUUID->"b198fd08-831e-4424-b72f-f896e7b5190b"],
+Cell[10856, 229, 723, 11, 70, "Input",ExpressionUUID->"e444cd1e-54ca-4b57-a304-98010286e2f9"],
+Cell[11582, 242, 173, 3, 70, "Text",ExpressionUUID->"a5641859-7e28-4787-89ea-b714286a2a79"]
 }
 ]
 *)

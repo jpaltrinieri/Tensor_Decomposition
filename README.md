@@ -6,7 +6,10 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
 
 - `ee_pipi_FF_Tree.nb` — e⁺e⁻ → π⁺π⁻ in scalar QED at tree level. The amplitude is projected onto the
   basis {v̄(p1) p̸3 u(p2), v̄(p1) u(p2)}; the form factors follow from solving G·F = B with G the Gram
-  matrix of the basis and B the projection of the amplitude. Result: F1 = −2e²/s, F2 = 0.
+  matrix of the basis and B the projection of the amplitude. Result: F1 = −2e²/s, F2 = 0. Then the
+  polarised amplitudes M(λa, λb) = F1 T1 + F2 T2 on explicit spinors (CEEX's: chiral basis, massive spinors
+  on ξ = (1,0,0,−1); λ = 2S_z along the e⁺ beam, so e⁺ helicity λa, e⁻ helicity −λb), in units of e²:
+  M(∓,∓) = ±β_π sinθ e^{∓iφ}, M(∓,±) = (2m_e/√s) β_π cosθ; Σ|M|² = 2β_π²(1 − β_e² cos²θ) = F·G·F.
 - `ee_pipi_FF_1L.nb` — the same at one loop (bare 1PI amplitude, ten diagrams, D dimensions). The form
   factors are obtained in two independent ways: projecting first and tensor-reducing the traces with TID,
   and tensor-reducing the open amplitude first and reading the coefficients off with the Dirac equation.
@@ -20,12 +23,14 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
   `FF_Tree_*.m`: agreement to 2×10⁻¹² (double precision). Step 2, per helicity: CEEX's spinor construction
   (`Spinors.f`, `Weyl.f`: chiral γ's, massive spinors on the reference ξ = (1,0,0,−1)) rebuilt in Mathematica;
   in double it reproduces CEEX's T to 10⁻¹⁶ per helicity with phases, at 50 digits it satisfies the Gram
-  matrix exactly; CEEX's 10⁻¹² is the cancellation in p₂·ξ = E − p_z for the e⁻ (parallel to ξ). Plain Mathematica, no FeynCalc. CEEX's e line is
+  matrix exactly; CEEX's 10⁻¹² is the cancellation in p₂·ξ = E − p_z for the e⁻ (parallel to ξ). Step 3: the
+  saved polarised amplitudes equal CEEX's `amp_pipi_LO` complex-conjugated, per helicity. Plain Mathematica, no FeynCalc. CEEX's e line is
   ū(p2)…v(p1), the complex conjugate of the notebook's v̄(p1)…u(p2).
 
 - `ee_pipi/` — the resulting form factors as Mathematica expressions, one file per form factor
   (`FF_Tree_1.m`, `FF_Tree_2.m`, `FF_1L_1.m`, `FF_1L_2.m`) plus the Gram matrix of the basis. Both notebooks
-  write here. The files are expressed in s, t, m12 = me² and m32 = mpi² (odd powers of the masses appear as
+  write here, and the tree notebook also writes the polarised amplitudes `Amp_Tree_<λa><λb>.m` (m/p = −1/+1,
+  in s, m12, m32 and the π⁺ angles th, ph). The form-factor files are expressed in s, t, m12 = me² and m32 = mpi² (odd powers of the masses appear as
   Sqrt[m12], Sqrt[m32]); the one-loop files are in the scalar A0/B0/C0/D0 basis with D kept symbolic.
 
 ## Requirements
