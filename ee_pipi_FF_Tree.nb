@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     24159,        538]
-NotebookOptionsPosition[     20588,        490]
-NotebookOutlinePosition[     20929,        505]
-CellTagsIndexPosition[     20886,        502]
+NotebookDataLength[     26075,        571]
+NotebookOptionsPosition[     22594,        524]
+NotebookOutlinePosition[     22935,        539]
+CellTagsIndexPosition[     22892,        536]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -375,38 +375,85 @@ Cell[BoxData[{
   RowBox[{"\"\<*\>\"", ",", " ", "outDir"}], "]"}]}], "Input",ExpressionUUID->\
 "a07ca69d-20df-4775-9fe9-8ff7faef0bde"],
 
-Cell["6. Polarised amplitudes", "Section",ExpressionUUID->"4336eb69-6e25-4f31-93ed-0a3c5395c172"],
+Cell["6. Polarised amplitudes in spinor brackets", "Section",ExpressionUUID->"69a37ca5-c508-4102-a9ce-bc1d3ed1b129"],
 
 Cell["\<\
-The amplitude per helicity, M(\[Lambda]a, \[Lambda]b) = F1 T1(\[Lambda]a, \
-\[Lambda]b) + F2 T2(\[Lambda]a, \[Lambda]b), with the form factors Fvec of \
-section 4 and the basis evaluated on explicit spinors: T1 = vbar(p1, \
-\[Lambda]a) p3slash u(p2, \[Lambda]b), T2 = vbar(p1, \[Lambda]a) u(p2, \
-\[Lambda]b). The spinors are CEEX's (SCRIPTS/Spinors.f, Weyl.f), so that \
-these amplitudes can be compared with CEEX helicity by helicity: chiral \
-basis, massless u+ = (\[Sqrt]K+, \[Sqrt]K- e^i\[Phi], 0, 0), u- = (0, 0, -\
-\[Sqrt]K- e^-i\[Phi], \[Sqrt]K+), and massive spinors on the reference \[Xi] \
-= (1, 0, 0, -1): u_\[Lambda](p) = u_\[Lambda](p\[Flat]) + m/\[Sqrt](2p\
-\[CenterDot]\[Xi]) u_-\[Lambda](\[Xi]), v_\[Lambda](p) = \
-u_-\[Lambda](p\[Flat]) - m/\[Sqrt](2p\[CenterDot]\[Xi]) u_\[Lambda](\[Xi]), p\
-\[Flat] = p - m^2/(2p\[CenterDot]\[Xi]) \[Xi], u+(\[Xi]) = (0, \[Sqrt]2, 0, \
-0), u-(\[Xi]) = (0, 0, \[Sqrt]2, 0). CEEX writes the e line as \
-ubar(p2)...v(p1), so its tensors are the complex conjugates of these.\
-\>", "Text",ExpressionUUID->"8676c0b0-c7ff-4955-8854-7663dea9a998"],
+The amplitude per helicity, M(\[Lambda]a, \[Lambda]b) = FF1 T1(\[Lambda]a, \
+\[Lambda]b) + FF2 T2(\[Lambda]a, \[Lambda]b), with T1 = vbar(p1, \[Lambda]a) \
+p3slash u(p2, \[Lambda]b) and T2 = vbar(p1, \[Lambda]a) u(p2, \[Lambda]b) \
+written in spinor brackets. Massive momenta are split along a light-like \
+reference \[Xi], as CEEX does (\[Xi] = (1, 0, 0, -1)): p = p\[Flat] + k with \
+k = m^2/(2 p\[CenterDot]\[Xi]) \[Xi] and p\[Flat] light-like, m^2 = 2 \
+p\[Flat]\[CenterDot]k. The massive spinors are then sums of massless ones, \
+exactly: u_\[Lambda](p2) = u_\[Lambda](2\[Flat]) + u_-\[Lambda](k2), v_\
+\[Lambda](p1) = u_-\[Lambda](1\[Flat]) - u_\[Lambda](k1). Brackets (CEEX's \
+Weyl.f): [ab] = ubar_-(a) u_+(b), \[LeftAngleBracket]ab\[RightAngleBracket] = \
+ubar_+(a) u_-(b), and the sandwiches \[LeftAngleBracket]a|3|b] = ubar_+(a) \
+p3slash u_+(b), [a|3|b\[RightAngleBracket] = ubar_-(a) p3slash u_-(b) with \
+the massive \[Pi]+ momentum. k1 and k2 are both along \[Xi], so \
+\[LeftAngleBracket]k1 k2\[RightAngleBracket] = [k1 k2] = 0. The labels \
+\[Lambda]a, \[Lambda]b are spin projections on the e+ beam axis: e+ helicity \
+\[Lambda]a, e- helicity -\[Lambda]b.\
+\>", "Text",ExpressionUUID->"c63655c5-da24-4774-9228-9780a3015fe2"],
 
 Cell["\<\
-Kinematics in the CM frame: e+ (p1) along +z, \[Pi]+ (p3) at polar angle th \
-and azimuth ph; E0 = \[Sqrt]s/2, pe and pp the electron and pion momenta. For \
-both beams p\[Flat] lies along +z, so the labels \[Lambda]a, \[Lambda]b are \
-spin projections on the +z axis (\[Lambda] = 2 S_z): the e+ helicity is \
-\[Lambda]a, the e- helicity is -\[Lambda]b.\
-\>", "Text",ExpressionUUID->"6d8e924d-46d4-45fb-bdd3-a760a1360993"],
+(* a bar spinor or spinor as a list of {coefficient, chirality, light-like \
+momentum} *)
+vbarP1[la_] := {{1, -la, \"1b\"}, {-1, la, \"k1\"}};
+uP2[lb_] := {{1, lb, \"2b\"}, {1, -lb, \"k2\"}};
+scalarPair[{c1_, h1_, a_}, {c2_, h2_, b_}] := c1 c2 Which[h1 == 1 && h2 == \
+-1, ang[a, b], h1 == -1 && h2 == 1, sq[a, b], True, 0];
+vectorPair[{c1_, h1_, a_}, {c2_, h2_, b_}] := c1 c2 Which[h1 == 1 && h2 == 1, \
+angP[a, b], h1 == -1 && h2 == -1, sqP[a, b], True, 0];
+alongXi = {ang[\"k1\", \"k2\"] -> 0, sq[\"k1\", \"k2\"] -> 0};
+basisBrackets[{la_, lb_}] := {Total[Flatten[Outer[vectorPair, vbarP1[la], \
+uP2[lb], 1]]],
+    Total[Flatten[Outer[scalarPair, vbarP1[la], uP2[lb], 1]]]} /. alongXi;
+(* display: 1b -> 1\[Flat] *)
+show[a_] := StringReplace[a, \"b\" -> \"\\[Flat]\"];
+Format[ang[a_, b_]] := Row[{\"\\[LeftAngleBracket]\", show[a], \" \", \
+show[b], \"\\[RightAngleBracket]\"}];
+Format[sq[a_, b_]] := Row[{\"[\", show[a], \" \", show[b], \"]\"}];
+Format[angP[a_, b_]] := Row[{\"\\[LeftAngleBracket]\", show[a], \"|3|\", \
+show[b], \"]\"}];
+Format[sqP[a_, b_]] := Row[{\"[\", show[a], \"|3|\", show[b], \
+\"\\[RightAngleBracket]\"}];
+helicities = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+polAmp = Association[Table[h -> FF[1] basisBrackets[h][[1]] + FF[2] \
+basisBrackets[h][[2]], {h, helicities}]];
+TableForm[Table[{h, polAmp[h]}, {h, helicities}], TableHeadings -> {None, \
+{\"{\\[Lambda]a, \\[Lambda]b}\", \"M = FF1 T1 + FF2 T2\"}}]\
+\>", "Input",ExpressionUUID->"ab62057e-d981-4e9c-b267-81f8638e7546"],
 
 Cell["\<\
-cmP = {{E0, 0, 0, pe}, {E0, 0, 0, -pe}, {E0, pp Sin[th] Cos[ph], pp Sin[th] \
-Sin[ph], pp Cos[th]},
-   {E0, -pp Sin[th] Cos[ph], -pp Sin[th] Sin[ph], -pp Cos[th]}};
-cmAssumptions = E0 > pe > 0 && pp > 0 && 0 < th < Pi && -Pi < ph <= Pi;
+Reading it: k = m^2/(2p\[CenterDot]\[Xi]) \[Xi], so |k_i\[RightAngleBracket] \
+= m_i/\[Sqrt](2 p_i\[CenterDot]\[Xi]) |\[Xi]\[RightAngleBracket] and the \
+k-spinors carry one power of the mass, except that \[Xi] is parallel to the \
+e-: then 2\[Flat] is the small one (|2\[Flat]\[RightAngleBracket] ~ m_e) and \
+k2 \[RightArrow] p2. Massless limit: k1 \[RightArrow] 0, 2\[Flat] \
+\[RightArrow] 0, k2 \[RightArrow] p2, so M(-,-) \[RightArrow] FF1 \
+\[LeftAngleBracket]1|3|2], M(+,+) \[RightArrow] FF1 \
+[1|3|2\[RightAngleBracket], and the opposite labels (helicity flips) vanish: \
+each of their terms has one small spinor. At tree level FF1 = -2e^2/s, FF2 = \
+0 (section 4).\
+\>", "Text",ExpressionUUID->"306f437e-2ee1-422f-8c07-bf9b9b144fbe"],
+
+Cell["\<\
+TableForm[Table[{h, polAmp[h] /. FF[i_] :> Fvec[[i]]}, {h, helicities}], \
+TableHeadings -> {None, {\"{\\[Lambda]a, \\[Lambda]b}\", \"M at tree \
+level\"}}]\
+\>", "Input",ExpressionUUID->"3e3666c4-c7a7-4584-80b4-7dfc713e62af"],
+
+Cell["\<\
+Check at one point (\[Sqrt]s = 0.7, cos\[Theta] = 0.3, \[Phi] = 0.4, 40 \
+digits): the brackets on explicit spinors (CEEX's conventions: chiral basis, \
+u+ = (\[Sqrt]K+, \[Sqrt]K- e^i\[Phi], 0, 0), u- = (0, 0, -\[Sqrt]K- \
+e^-i\[Phi], \[Sqrt]K+), u+(\[Xi]) = (0, \[Sqrt]2, 0, 0), u-(\[Xi]) = (0, 0, \
+\[Sqrt]2, 0)) against vbar \[CapitalGamma] u built directly from the massive \
+spinors, and the spin sum against F.G.F.\
+\>", "Text",ExpressionUUID->"183d475c-2346-4910-b44e-03590e33bd17"],
+
+Cell["\<\
 mink[a_, b_] := a[[1]] b[[1]] - a[[2 ;; 4]] . b[[2 ;; 4]];
 colMajor[l_] := Transpose[Partition[l, 4]];   (* the Fortran reshape of \
 Spinors.f *)
@@ -415,78 +462,65 @@ colMajor[{0,0,0,1, 0,0,1,0, 0,-1,0,0, -1,0,0,0}],
    colMajor[{0,0,0,I, 0,0,-I,0, 0,-I,0,0, I,0,0,0}], colMajor[{0,0,1,0, \
 0,0,0,-1, -1,0,0,0, 0,1,0,0}]};
 diracBar[w_] := Conjugate[w[[{3, 4, 1, 2}]]];
-xiRef = {1, 0, 0, -1};
-xiSpinor = <|1 -> {0, Sqrt[2], 0, 0}, -1 -> {0, 0, Sqrt[2], 0}|>;
-(* massless spinors of a K along +z (e^{i\[Phi]} = 1, K^- = 0): the case of \
-both p\[Flat] here *)
-masslessZ[K_] := <|1 -> {Sqrt[K[[1]] + K[[4]]], 0, 0, 0}, -1 -> {0, 0, 0, \
-Sqrt[K[[1]] + K[[4]]]}|>;
-massiveSpinors[p_] := Module[{dot = mink[p, xiRef], pflat, uf, c},
-   pflat = Simplify[p - xiRef mink[p, p]/(2 dot), cmAssumptions]; uf = \
-masslessZ[pflat];
-   c = Sqrt[mink[p, p]]/Sqrt[2 dot];
-   <|\"u\" -> <|1 -> uf[1] + c xiSpinor[-1], -1 -> uf[-1] + c xiSpinor[1]|>,
-     \"v\" -> <|1 -> uf[-1] - c xiSpinor[1], -1 -> uf[1] - c xiSpinor[-1]|>|>];
-{Simplify[cmP[[1]] - xiRef mink[cmP[[1]], cmP[[1]]]/(2 mink[cmP[[1]], xiRef])],
- Simplify[cmP[[2]] - xiRef mink[cmP[[2]], cmP[[2]]]/(2 mink[cmP[[2]], \
-xiRef]), cmAssumptions]}   (* p\[Flat] of e+, e-: both along +z *)\
-\>", "Input",ExpressionUUID->"a5c954b5-ea7b-4be4-b6ad-9d57ba94d20c"],
+massless[K_] := Module[{e = K[[2]] + I K[[3]], sp, sm},
+   e = If[e != 0, e/Abs[e], If[K[[4]] > 0, 1, -1]]; sp = Sqrt[Max[K[[1]] + \
+K[[4]], 0]]; sm = Sqrt[Max[K[[1]] - K[[4]], 0]];
+   <|1 -> {sp, sm e, 0, 0}, -1 -> {0, 0, -sm Conjugate[e], sp}|>];
+xiRef = {1, 0, 0, -1}; xiSpinor = <|1 -> {0, Sqrt[2], 0, 0}, -1 -> {0, 0, \
+Sqrt[2], 0}|>;
+flat[p_] := p - xiRef mink[p, p]/(2 mink[p, xiRef]); kScale[p_] := mink[p, \
+p]/(2 mink[p, xiRef]);
+pt = Module[{E0 = 7/20, mE = 51099895/10^11, mP = 13957/10^5, c = 3/10, ph = \
+2/5, pe, pp, sn},
+   pe = Sqrt[E0^2 - mE^2]; pp = Sqrt[E0^2 - mP^2]; sn = Sqrt[1 - c^2];
+   N[{{E0, 0, 0, pe}, {E0, 0, 0, -pe}, {E0, pp sn Cos[ph], pp sn Sin[ph], pp \
+c}, {E0, -pp sn Cos[ph], -pp sn Sin[ph], -pp c}}, 40]];
+light = <|\"1b\" -> massless[flat[pt[[1]]]], \"2b\" -> massless[flat[pt[[2]]]],
+   \"k1\" -> Sqrt[kScale[pt[[1]]]] xiSpinor, \"k2\" -> Sqrt[kScale[pt[[2]]]] \
+xiSpinor|>;
+p3slash = Sum[pt[[3, m]] {1, -1, -1, -1}[[m]] gammaCEEX[[m]], {m, 4}];
+bracketValues = {ang[a_, b_] :> diracBar[light[a][1]] . light[b][-1], sq[a_, \
+b_] :> diracBar[light[a][-1]] . light[b][1],
+   angP[a_, b_] :> diracBar[light[a][1]] . p3slash . light[b][1], sqP[a_, b_] \
+:> diracBar[light[a][-1]] . p3slash . light[b][-1]};
+(* the massive spinors of CEEX built directly, and vbar(p1) Gamma u(p2) *)
+u2[l_] := light[\"2b\"][l] + light[\"k2\"][-l]; v1[l_] := light[\"1b\"][-l] - \
+light[\"k1\"][l];
+direct[{la_, lb_}] := {diracBar[v1[la]] . p3slash . u2[lb], diracBar[v1[la]] \
+. u2[lb]};
+TableForm[Table[{h, N[Max[Abs[(basisBrackets[h] /. bracketValues) - \
+direct[h]]], 3]}, {h, helicities}],
+  TableHeadings -> {None, {\"{\\[Lambda]a, \\[Lambda]b}\", \"|brackets - \
+direct|\"}}]\
+\>", "Input",ExpressionUUID->"1f2cb0ca-120f-4246-b426-0958cc575bd9"],
 
 Cell["\<\
-helicities = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-basisHel[{la_, lb_}] := Module[{vb = \
-diracBar[massiveSpinors[cmP[[1]]][\"v\"][la]], u = \
-massiveSpinors[cmP[[2]]][\"u\"][lb]},
-   FullSimplify[ComplexExpand[{mink[Table[vb . gammaCEEX[[m]] . u, {m, 4}], \
-cmP[[3]]], vb . u}], cmAssumptions]];
-Thel = Association[Table[h -> basisHel[h], {h, helicities}]];
-TableForm[Table[{h, Thel[h][[1]], Thel[h][[2]]}, {h, helicities}], \
-TableHeadings -> {None, {\"{\[Lambda]a, \[Lambda]b}\", \"T1\", \"T2\"}}]\
-\>", "Input",ExpressionUUID->"88b444cb-7ff3-4206-873b-76751bd543c3"],
+treeAt = Fvec /. {s -> mink[pt[[1]] + pt[[2]], pt[[1]] + pt[[2]]]};
+spinSum = Total[Table[Abs[(polAmp[h] /. FF[i_] :> treeAt[[i]]) /. \
+bracketValues]^2, {h, helicities}]];
+FGF = treeAt . (G /. {s -> mink[pt[[1]] + pt[[2]], pt[[1]] + pt[[2]]], t -> \
+mink[pt[[1]] - pt[[3]], pt[[1]] - pt[[3]]],
+      me -> Sqrt[mink[pt[[1]], pt[[1]]]], mpi -> Sqrt[mink[pt[[3]], \
+pt[[3]]]]}) . treeAt;
+N[{spinSum, FGF, spinSum/FGF - 1} /. SMP[\"e\"] -> 1, 20]\
+\>", "Input",ExpressionUUID->"89babe20-302d-4beb-978a-cdb42cf37d5c"],
 
 Cell["\<\
-The amplitudes: Fvec at s = 4 E0^2 (at LO F1 = -2e^2/s, F2 = 0). Equal labels \
-(opposite helicities, J_z = \[PlusMinus]1 along the beam) give the \
-unsuppressed \[Beta]\[Pi] sin\[Theta] e^\[MinusPlus]i\[Phi] (in units of \
-e^2); opposite labels need a helicity flip and are \[Proportional] me/E0.\
-\>", "Text",ExpressionUUID->"5b6d7a7e-3bc9-4393-a08d-c1c07eee39ff"],
+Save the polarised amplitudes, one file per helicity, Pol_Amp_<\[Lambda]a><\
+\[Lambda]b>.m (m/p for -1/+1, e.g. Pol_Amp_mp.m: \[Lambda]a = -1, \[Lambda]b \
+= +1), as FF[1] T1 + FF[2] T2 in the brackets ang[a, b], sq[a, b], angP[a, b] \
+= \[LeftAngleBracket]a|3|b], sqP[a, b] = [a|3|b\[RightAngleBracket] of the \
+light-like momenta \"1b\", \"k1\", \"2b\", \"k2\". The form factors FF[i] are \
+those of FF_Tree_i.m (or FF_1L_i.m at one loop): the bracket structure is the \
+same at every order.\
+\>", "Text",ExpressionUUID->"48cd20b8-210d-4a5c-8cbd-7cb025636c88"],
 
 Cell["\<\
-Mhel = Association[Table[h -> FullSimplify[(Fvec /. s -> 4 E0^2) . Thel[h], \
-cmAssumptions], {h, helicities}]];
-TableForm[Table[{h, Mhel[h]}, {h, helicities}], TableHeadings -> {None, {\"{\
-\[Lambda]a, \[Lambda]b}\", \"M\"}}]\
-\>", "Input",ExpressionUUID->"fc19863d-e8b9-45d2-a5b0-e9cf4c06e8f4"],
-
-Cell["\<\
-Check: the spin sum reproduces the unpolarised result, \[Sum] |M|^2 = 2 e^4 \
-pp^2 (E0^2 - pe^2 cos^2\[Theta])/E0^4 = 2 e^4 \[Beta]\[Pi]^2 (1 - \[Beta]e^2 \
-cos^2\[Theta]), and agrees with F.G.F of section 4 at the same kinematics.\
-\>", "Text",ExpressionUUID->"439a5d31-081c-4b22-9379-d7e6ff8c96ae"],
-
-Cell["\<\
-spinSumHel = FullSimplify[Total[Table[ComplexExpand[Mhel[h] \
-Conjugate[Mhel[h]]], {h, helicities}]], cmAssumptions]
-FullSimplify[spinSumHel - (Fvec . G . Fvec /. {t -> mink[cmP[[1]] - cmP[[3]], \
-cmP[[1]] - cmP[[3]]], s -> 4 E0^2,
-     me -> Sqrt[E0^2 - pe^2], mpi -> Sqrt[E0^2 - pp^2]}), cmAssumptions]\
-\>", "Input",ExpressionUUID->"26589379-2e79-4c5d-9ff9-9cd1b2ecc573"],
-
-Cell["\<\
-Save, in the variables of the form-factor files: s, m12 = me^2, m32 = mpi^2, \
-and the angles th, ph of the \[Pi]+. One file per helicity, Amp_Tree_<\
-\[Lambda]a><\[Lambda]b>.m with m/p for -1/+1 (e.g. Amp_Tree_mp.m: \[Lambda]a \
-= -1, \[Lambda]b = +1).\
-\>", "Text",ExpressionUUID->"64bc5cdb-2ff8-4c4a-b4c2-bca89c279afd"],
-
-Cell["\<\
-toInvariants = {E0 -> Sqrt[s]/2, pe -> Sqrt[s/4 - m12], pp -> Sqrt[s/4 - m32]};
 label[l_] := If[l == 1, \"p\", \"m\"];
-Do[Put[Simplify[Mhel[h] /. toInvariants, s > 4 m32 && m32 > m12 > 0],
-   FileNameJoin[{outDir, \"Amp_Tree_\" <> label[h[[1]]] <> label[h[[2]]] <> \
-\".m\"}]], {h, helicities}];
-FileNames[\"Amp_Tree_*\", outDir]\
-\>", "Input",ExpressionUUID->"ab8360ff-c1a5-413c-abb7-603fcacab7ae"]
+Do[Put[polAmp[h], FileNameJoin[{outDir, \"Pol_Amp_\" <> label[h[[1]]] <> \
+label[h[[2]]] <> \".m\"}]], {h, helicities}];
+FileNames[\"Pol_Amp_*\", outDir]\
+\>", "Input",ExpressionUUID->"13cbf88c-3187-4a3a-9e6d-747d1ba5e035"]
 },
 WindowSize->{1100, 800},
 FrontEndVersion->"14.2 for Linux x86 (64-bit) (March 16, 2025)",
@@ -529,17 +563,16 @@ Cell[11910, 303, 81, 0, 70, "Section",ExpressionUUID->"a357f89f-0b3d-4a44-b012-f
 Cell[11994, 305, 478, 7, 70, "Text",ExpressionUUID->"2417d222-b344-4bb2-b46c-9c8be8ec8ff6"],
 Cell[12475, 314, 635, 16, 70, "Input",ExpressionUUID->"45afd477-3442-41a1-81f1-525a78195d4a"],
 Cell[13113, 332, 1521, 43, 70, "Input",ExpressionUUID->"a07ca69d-20df-4775-9fe9-8ff7faef0bde"],
-Cell[14637, 377, 97, 0, 70, "Section",ExpressionUUID->"4336eb69-6e25-4f31-93ed-0a3c5395c172"],
-Cell[14737, 379, 1102, 15, 70, "Text",ExpressionUUID->"8676c0b0-c7ff-4955-8854-7663dea9a998"],
-Cell[15842, 396, 432, 6, 70, "Text",ExpressionUUID->"6d8e924d-46d4-45fb-bdd3-a760a1360993"],
-Cell[16277, 404, 1589, 28, 70, "Input",ExpressionUUID->"a5c954b5-ea7b-4be4-b6ad-9d57ba94d20c"],
-Cell[17869, 434, 580, 10, 70, "Input",ExpressionUUID->"88b444cb-7ff3-4206-873b-76751bd543c3"],
-Cell[18452, 446, 376, 5, 70, "Text",ExpressionUUID->"5b6d7a7e-3bc9-4393-a08d-c1c07eee39ff"],
-Cell[18831, 453, 306, 5, 70, "Input",ExpressionUUID->"fc19863d-e8b9-45d2-a5b0-e9cf4c06e8f4"],
-Cell[19140, 460, 310, 4, 70, "Text",ExpressionUUID->"439a5d31-081c-4b22-9379-d7e6ff8c96ae"],
-Cell[19453, 466, 384, 6, 70, "Input",ExpressionUUID->"26589379-2e79-4c5d-9ff9-9cd1b2ecc573"],
-Cell[19840, 474, 332, 5, 70, "Text",ExpressionUUID->"64bc5cdb-2ff8-4c4a-b4c2-bca89c279afd"],
-Cell[20175, 481, 409, 7, 70, "Input",ExpressionUUID->"ab8360ff-c1a5-413c-abb7-603fcacab7ae"]
+Cell[14637, 377, 116, 0, 70, "Section",ExpressionUUID->"69a37ca5-c508-4102-a9ce-bc1d3ed1b129"],
+Cell[14756, 379, 1252, 17, 70, "Text",ExpressionUUID->"c63655c5-da24-4774-9228-9780a3015fe2"],
+Cell[16011, 398, 1514, 27, 70, "Input",ExpressionUUID->"ab62057e-d981-4e9c-b267-81f8638e7546"],
+Cell[17528, 427, 752, 11, 70, "Text",ExpressionUUID->"306f437e-2ee1-422f-8c07-bf9b9b144fbe"],
+Cell[18283, 440, 236, 4, 70, "Input",ExpressionUUID->"3e3666c4-c7a7-4584-80b4-7dfc713e62af"],
+Cell[18522, 446, 499, 7, 70, "Text",ExpressionUUID->"183d475c-2346-4910-b44e-03590e33bd17"],
+Cell[19024, 455, 2189, 39, 70, "Input",ExpressionUUID->"1f2cb0ca-120f-4246-b426-0958cc575bd9"],
+Cell[21216, 496, 524, 9, 70, "Input",ExpressionUUID->"89babe20-302d-4beb-978a-cdb42cf37d5c"],
+Cell[21743, 507, 572, 8, 70, "Text",ExpressionUUID->"48cd20b8-210d-4a5c-8cbd-7cb025636c88"],
+Cell[22318, 517, 272, 5, 70, "Input",ExpressionUUID->"13cbf88c-3187-4a3a-9e6d-747d1ba5e035"]
 }
 ]
 *)

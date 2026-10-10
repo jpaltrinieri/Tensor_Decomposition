@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     14627,        287]
-NotebookOptionsPosition[     11759,        247]
-NotebookOutlinePosition[     12075,        261]
-CellTagsIndexPosition[     12032,        258]
+NotebookDataLength[     15411,        300]
+NotebookOptionsPosition[     12542,        260]
+NotebookOutlinePosition[     12858,        274]
+CellTagsIndexPosition[     12815,        271]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -216,34 +216,47 @@ Px[[2]]], t -> mdot[Px[[1]] - Px[[3]], Px[[1]] - Px[[3]]]}];
 N[Max[Abs[Flatten[Gx - GNBx]/Flatten[GNBx]]]]\
 \>", "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"],
 
-Cell["5. Polarised amplitudes against CEEX", "Section",ExpressionUUID->"fb114d98-58b9-415c-914c-b9dcb0141fec"],
+Cell["5. Polarised amplitudes against CEEX", "Section",ExpressionUUID->"3354f54e-2025-484b-b648-fb7656a823ad"],
 
 Cell["\<\
-ee_pipi_FF_Tree.nb (section 6) saves M(\[Lambda]a, \[Lambda]b) = F1 vbar(p1) \
-p3slash u(p2) + F2 vbar(p1) u(p2) per helicity on CEEX's spinors, as \
-ee_pipi/Amp_Tree_<\[Lambda]a><\[Lambda]b>.m. CEEX's amp_pipi_LO is FF_LO.T \
-with T on ubar(p2)...v(p1), the complex conjugate basis: so M = (CEEX \
-amplitude)^* per helicity, e = 1. Evaluated at the CEEX point (cos\[Theta] = \
-3/10, \[Phi] = 2/5).\
-\>", "Text",ExpressionUUID->"b198fd08-831e-4424-b72f-f896e7b5190b"],
+ee_pipi_FF_Tree.nb (section 6) saves M(\[Lambda]a, \[Lambda]b) = FF[1] T1 + \
+FF[2] T2 per helicity in spinor brackets of the light-like momenta 1\[Flat], \
+k1, 2\[Flat], k2 (each massive e\[PlusMinus] split along \[Xi], p = p\[Flat] \
++ k), as ee_pipi/Pol_Amp_<\[Lambda]a><\[Lambda]b>.m. Here the brackets are \
+evaluated on CEEX's light-like spinors at the CEEX point (50 digits), with \
+the tree form factors of FF_Tree_*.m (e = 1). CEEX's amp_pipi_LO is FF_LO.T \
+on ubar(p2)...v(p1), the complex conjugate basis, so M = (CEEX amplitude)^* \
+per helicity.\
+\>", "Text",ExpressionUUID->"c2ac6dca-49d1-49d3-a19e-e17fb1546c49"],
 
 Cell["\<\
-ampFile[{la_, lb_}] := Get[FileNameJoin[{dir, \"Amp_Tree_\" <> If[la == 1, \
-\"p\", \"m\"] <> If[lb == 1, \"p\", \"m\"] <> \".m\"}]];
-ampAt[h_] := Block[{s, m12, m32, th, ph}, ampFile[h] /. {SMP[\"e\"] -> 1, s \
--> Px[[1, 1]]^2 4, m12 -> (51099895/10^11)^2,
-     m32 -> (13957/10^5)^2, th -> ArcCos[3/10], ph -> 2/5}];
+flat[p_] := p - xi mdot[p, p]/(2 mdot[p, xi]); kScale[p_] := mdot[p, p]/(2 \
+mdot[p, xi]);
+light = <|\"1b\" -> weyl[flat[Px[[1]]]], \"2b\" -> weyl[flat[Px[[2]]]],
+   \"k1\" -> Sqrt[kScale[Px[[1]]]] uxi, \"k2\" -> Sqrt[kScale[Px[[2]]]] \
+uxi|>;
+p3slash = Sum[Px[[3, m]] {1, -1, -1, -1}[[m]] g[[m]], {m, 4}];
+bracketValues = {ang[a_, b_] :> dbar[light[a][1]] . light[b][-1], sq[a_, b_] \
+:> dbar[light[a][-1]] . light[b][1],
+   angP[a_, b_] :> dbar[light[a][1]] . p3slash . light[b][1], sqP[a_, b_] :> \
+dbar[light[a][-1]] . p3slash . light[b][-1]};
+FFtree = Block[{s, m12, m32}, {Get[FileNameJoin[{dir, \"FF_Tree_1.m\"}]], \
+Get[FileNameJoin[{dir, \"FF_Tree_2.m\"}]]} /.
+    {SMP[\"e\"] -> 1, s -> mdot[Px[[1]] + Px[[2]], Px[[1]] + Px[[2]]]}];
+polAmpAt[{la_, lb_}] := (Get[FileNameJoin[{dir, \"Pol_Amp_\" <> If[la == 1, \
+\"p\", \"m\"] <> If[lb == 1, \"p\", \"m\"] <> \".m\"}]] /.
+    FF[i_] :> FFtree[[i]]) /. bracketValues;
 ampCEEX[{la_, lb_}] := (-2/s) T[1, la, lb];   (* FF_LO = (-2/s34, 0) *)
-TableForm[Table[{h, N[ampAt[h], 10], ampCEEX[h], If[ampCEEX[h] == 0, 0, \
-N[Abs[ampAt[h]/Conjugate[ampCEEX[h]] - 1]]]}, {h, hels}],
-  TableHeadings -> {None, {\"{\[Lambda]a, \[Lambda]b}\", \"M (notebook)\", \
+TableForm[Table[{h, N[polAmpAt[h], 12], ampCEEX[h], \
+N[Abs[polAmpAt[h]/Conjugate[ampCEEX[h]] - 1]]}, {h, hels}],
+  TableHeadings -> {None, {\"{\\[Lambda]a, \\[Lambda]b}\", \"M (brackets)\", \
 \"CEEX amp_pipi_LO\", \"|M/CEEX^* - 1|\"}}]\
-\>", "Input",ExpressionUUID->"e444cd1e-54ca-4b57-a304-98010286e2f9"],
+\>", "Input",ExpressionUUID->"41a408c6-5883-45af-8d1c-78146adc9b7c"],
 
 Cell["\<\
-Result: M = CEEX^* in every helicity to ~10^-12, CEEX's double-precision \
-error of section 4.\
-\>", "Text",ExpressionUUID->"a5641859-7e28-4787-89ea-b714286a2a79"]
+Result: M = CEEX^* in every helicity to ~10^-12 (8\[Times]10^-12 for the \
+flips), CEEX's double-precision error of section 4.\
+\>", "Text",ExpressionUUID->"16f99b54-03dc-4d50-b6b0-45f39cb917fb"]
 },
 FrontEndVersion->"14.2 for Linux x86 (64-bit) (March 16, 2025)",
 StyleDefinitions->"Default.nb",
@@ -285,10 +298,10 @@ Cell[8800, 188, 522, 7, 70, "Text",ExpressionUUID->"40dbc9de-ec9b-4eec-9097-48a0
 Cell[9325, 197, 161, 3, 70, "Input",ExpressionUUID->"34adbff7-d496-4d8d-b742-dc32693f4075"],
 Cell[9489, 202, 279, 4, 70, "Text",ExpressionUUID->"1ef01660-17d7-42ed-996c-862b5c843a5d"],
 Cell[9771, 208, 489, 8, 70, "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"],
-Cell[10263, 218, 110, 0, 70, "Section",ExpressionUUID->"fb114d98-58b9-415c-914c-b9dcb0141fec"],
-Cell[10376, 220, 477, 7, 70, "Text",ExpressionUUID->"b198fd08-831e-4424-b72f-f896e7b5190b"],
-Cell[10856, 229, 723, 11, 70, "Input",ExpressionUUID->"e444cd1e-54ca-4b57-a304-98010286e2f9"],
-Cell[11582, 242, 173, 3, 70, "Text",ExpressionUUID->"a5641859-7e28-4787-89ea-b714286a2a79"]
+Cell[10263, 218, 110, 0, 70, "Section",ExpressionUUID->"3354f54e-2025-484b-b648-fb7656a823ad"],
+Cell[10376, 220, 638, 9, 70, "Text",ExpressionUUID->"c2ac6dca-49d1-49d3-a19e-e17fb1546c49"],
+Cell[11017, 231, 1313, 22, 70, "Input",ExpressionUUID->"41a408c6-5883-45af-8d1c-78146adc9b7c"],
+Cell[12333, 255, 205, 3, 70, "Text",ExpressionUUID->"16f99b54-03dc-4d50-b6b0-45f39cb917fb"]
 }
 ]
 *)
