@@ -1,0 +1,145 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Wolfram 14.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       154,          7]
+NotebookDataLength[      6276,        136]
+NotebookOptionsPosition[      4812,        111]
+NotebookOutlinePosition[      5128,        125]
+CellTagsIndexPosition[      5085,        122]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell["\<\
+CEEX check for e+e- \[LongRightArrow] \[Pi]+\[Pi]- at LO: spin tensors and \
+form factors\
+\>", "Title",ExpressionUUID->"a2317614-d243-4053-b720-af57d77c2095"],
+
+Cell["\<\
+Checks CEEX's numerical spin tensors T_pipi against the tree-level \
+decomposition of ee_pipi_FF_Tree.nb. Step 1, the Gram check: G_ij = \
+\[Sum]_spins T_i T_j^* does not depend on spinor phases or conventions, so \
+CEEX's tensors summed over the four helicities must reproduce \
+ee_pipi/Gram_Matrix.m at the same phase-space point. Plain Mathematica, no \
+FeynCalc.\
+\>", "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
+
+Cell["1. The CEEX point", "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
+
+Cell["\<\
+ee_pipi/CEEX_point.m is written by CEEX's \
+TESTS/TESTS_DRIVERS/gram_pipi_dump.f90 (double precision): CMD, \[Sqrt]s = \
+0.7 GeV, cos\[Theta] = 0.3, \[Phi] = 0.4 for the \[Pi]+. It sets s, t, me, \
+mpi, the momenta p1..p4 (rows {E, px, py, pz}; p1 = e+ along +z, p2 = e-, p3 \
+= \[Pi]+, p4 = \[Pi]-), the CEEX tensors T[i, \[Lambda]a, \[Lambda]b] (i = 1: \
+[ubar(p2) \[Gamma]^\[Mu] v(p1)] p3_\[Mu], i = 2: ubar(p2) v(p1); \[Lambda]a, \
+\[Lambda]b the CEEX labels of e+, e-) and bornSum = \[Sum]_\[Lambda] \
+|amp_pipi_LO|^2 without e^4 and F_\[Pi].\
+\>", "Text",ExpressionUUID->"23bf2174-4d67-4a96-a9b5-dfe79e958ba0"],
+
+Cell["\<\
+dir = FileNameJoin[{Quiet[Check[NotebookDirectory[], Directory[]]], \"ee_pipi\
+\"}];
+Clear[s, t, me, mpi, T];
+Get[FileNameJoin[{dir, \"CEEX_point.m\"}]];
+hels = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};\
+\>", "Input",ExpressionUUID->"199d89fc-955f-4b9c-bff8-31db77cc7d89"],
+
+Cell["\<\
+The point is consistent: momentum conservation, mass shells, and s, t from \
+the momenta. The electron mass shell holds only to ~10^-11, because p1^2 = \
+E^2 - pz^2 subtracts two numbers ~0.12 to get me^2 ~ 2.6\[Times]10^-7.\
+\>", "Text",ExpressionUUID->"588e7817-699c-43c3-bd2c-9b410cdb289e"],
+
+Cell["\<\
+mdot[a_, b_] := a[[1]] b[[1]] - a[[2 ;; 4]] . b[[2 ;; 4]];
+<|\"p1+p2-p3-p4\" -> Max@Abs[p1 + p2 - p3 - p4], \"p1^2/me^2 - 1\" -> \
+mdot[p1, p1]/me^2 - 1,
+  \"p3^2/mpi^2 - 1\" -> mdot[p3, p3]/mpi^2 - 1, \"s - (p1+p2)^2\" -> s - \
+mdot[p1 + p2, p1 + p2],
+  \"t - (p1-p3)^2\" -> t - mdot[p1 - p3, p1 - p3]|>\
+\>", "Input",ExpressionUUID->"a3a221e5-e474-4c8c-9b03-b330445bdcd5"],
+
+Cell["2. Gram check", "Section",ExpressionUUID->"ff6659ba-b07f-4c58-92a1-c738e3bb9ddb"],
+
+Cell["\<\
+CEEX writes the e line as ubar(p2)...v(p1), the complex conjugate of the \
+notebook's vbar(p1)...u(p2): helicity by helicity T_CEEX = (T_notebook)^*, so \
+its Gram matrix is the complex conjugate of the notebook's. That one is real, \
+so the two must agree as they are.\
+\>", "Text",ExpressionUUID->"1d80e715-4f19-4abb-b7ed-84b4e32d2582"],
+
+Cell["\<\
+GCEEX = Table[Sum[T[i, h[[1]], h[[2]]] Conjugate[T[j, h[[1]], h[[2]]]], {h, \
+hels}], {i, 2}, {j, 2}];
+GNB = Get[FileNameJoin[{dir, \"Gram_Matrix.m\"}]] /. {m12 -> me^2, m32 -> \
+mpi^2};
+{MatrixForm[Chop[GCEEX, 10^-14]], MatrixForm[GNB], MatrixForm[Abs[GCEEX - \
+GNB]/Abs[GNB]]}\
+\>", "Input",ExpressionUUID->"61aa8557-6d37-489e-b2b6-73ad4835cc7a"],
+
+Cell["\<\
+Result: agreement to ~2\[Times]10^-12 in every entry, including the \
+helicity-flip entry G12 \[Proportional] me. Not the mass shell (using p1^2, \
+p3^2 of the momenta for m12, m32 leaves it unchanged): the likely source is \
+CEEX's massive-spinor reference XI_BEAM = (1, 0, 0, -1), parallel to the e- \
+momentum, so p2\[CenterDot]\[Xi] = E - pz ~ 3.7\[Times]10^-7 is a \
+cancellation in double precision. Physically irrelevant; the per-helicity \
+check (step 2) will see it directly.\
+\>", "Text",ExpressionUUID->"a460f74e-c670-4054-a572-6eb1d4d26695"],
+
+Cell["3. Born spin sum", "Section",ExpressionUUID->"539de5bd-3fc3-44d7-8fa7-8ada5bbc8dfa"],
+
+Cell["\<\
+\[Sum]_\[Lambda] |F1 T1 + F2 T2|^2 = F.G.F with the notebook's form factors \
+(e = 1), against CEEX's amp_pipi_LO, which uses FF_LO = (-2/s34, 0).\
+\>", "Text",ExpressionUUID->"75688fe6-4511-4212-8ef9-b5ccbcd2ef8f"],
+
+Cell["\<\
+F = {Get[FileNameJoin[{dir, \"FF_Tree_1.m\"}]], Get[FileNameJoin[{dir, \
+\"FF_Tree_2.m\"}]]} /. SMP[\"e\"] -> 1;
+{F, F . GNB . F, bornSum, Abs[F . GNB . F/bornSum - 1]}\
+\>", "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"]
+},
+FrontEndVersion->"14.2 for Linux x86 (64-bit) (March 16, 2025)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"aa43d15a-ef65-4c18-8cf6-54877b514921"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[554, 20, 169, 3, 70, "Title",ExpressionUUID->"a2317614-d243-4053-b720-af57d77c2095"],
+Cell[726, 25, 445, 7, 70, "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
+Cell[1174, 34, 91, 0, 70, "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
+Cell[1268, 36, 626, 9, 70, "Text",ExpressionUUID->"23bf2174-4d67-4a96-a9b5-dfe79e958ba0"],
+Cell[1897, 47, 278, 6, 70, "Input",ExpressionUUID->"199d89fc-955f-4b9c-bff8-31db77cc7d89"],
+Cell[2178, 55, 303, 4, 70, "Text",ExpressionUUID->"588e7817-699c-43c3-bd2c-9b410cdb289e"],
+Cell[2484, 61, 384, 7, 70, "Input",ExpressionUUID->"a3a221e5-e474-4c8c-9b03-b330445bdcd5"],
+Cell[2871, 70, 87, 0, 70, "Section",ExpressionUUID->"ff6659ba-b07f-4c58-92a1-c738e3bb9ddb"],
+Cell[2961, 72, 348, 5, 70, "Text",ExpressionUUID->"1d80e715-4f19-4abb-b7ed-84b4e32d2582"],
+Cell[3312, 79, 358, 7, 70, "Input",ExpressionUUID->"61aa8557-6d37-489e-b2b6-73ad4835cc7a"],
+Cell[3673, 88, 563, 8, 70, "Text",ExpressionUUID->"a460f74e-c670-4054-a572-6eb1d4d26695"],
+Cell[4239, 98, 90, 0, 70, "Section",ExpressionUUID->"539de5bd-3fc3-44d7-8fa7-8ada5bbc8dfa"],
+Cell[4332, 100, 225, 3, 70, "Text",ExpressionUUID->"75688fe6-4511-4212-8ef9-b5ccbcd2ef8f"],
+Cell[4560, 105, 248, 4, 70, "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -14,6 +14,12 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
   per diagram class, and alternative strategies (IBP reduction to master integrals, helicity amplitudes,
   numerical evaluation) are discussed.
 
+- `ee_pipi_check_CEEX.nb` — checks CEEX's numerical spin tensors (`T_pipi`) against the tree decomposition.
+  Step 1, the Gram check: Σ_spins T_i T_j^* from CEEX at one CMD point (`ee_pipi/CEEX_point.m`, written by
+  CEEX's `TESTS/TESTS_DRIVERS/gram_pipi_dump.f90`) against `ee_pipi/Gram_Matrix.m`, and the Born spin sum with
+  `FF_Tree_*.m`: agreement to 2×10⁻¹² (double precision). Plain Mathematica, no FeynCalc. CEEX's e line is
+  ū(p2)…v(p1), the complex conjugate of the notebook's v̄(p1)…u(p2).
+
 - `ee_pipi/` — the resulting form factors as Mathematica expressions, one file per form factor
   (`FF_Tree_1.m`, `FF_Tree_2.m`, `FF_1L_1.m`, `FF_1L_2.m`) plus the Gram matrix of the basis. Both notebooks
   write here. The files are expressed in s, t, m12 = me² and m32 = mpi² (odd powers of the masses appear as
