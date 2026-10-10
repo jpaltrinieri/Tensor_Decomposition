@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[     26075,        571]
-NotebookOptionsPosition[     22594,        524]
-NotebookOutlinePosition[     22935,        539]
-CellTagsIndexPosition[     22892,        536]
+NotebookDataLength[     26821,        584]
+NotebookOptionsPosition[     23340,        537]
+NotebookOutlinePosition[     23681,        552]
+CellTagsIndexPosition[     23638,        549]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -375,7 +375,9 @@ Cell[BoxData[{
   RowBox[{"\"\<*\>\"", ",", " ", "outDir"}], "]"}]}], "Input",ExpressionUUID->\
 "a07ca69d-20df-4775-9fe9-8ff7faef0bde"],
 
-Cell["6. Polarised amplitudes in spinor brackets", "Section",ExpressionUUID->"69a37ca5-c508-4102-a9ce-bc1d3ed1b129"],
+Cell["6. Polarised amplitudes in spinor brackets \[LeftAngleBracket]ij\
+\[RightAngleBracket], [ij]", "Section",ExpressionUUID->"9bb3c227-4f60-4a3d-\
+a893-8ddbbc63b2ca"],
 
 Cell["\<\
 The amplitude per helicity, M(\[Lambda]a, \[Lambda]b) = FF1 T1(\[Lambda]a, \
@@ -388,13 +390,18 @@ p\[Flat]\[CenterDot]k. The massive spinors are then sums of massless ones, \
 exactly: u_\[Lambda](p2) = u_\[Lambda](2\[Flat]) + u_-\[Lambda](k2), v_\
 \[Lambda](p1) = u_-\[Lambda](1\[Flat]) - u_\[Lambda](k1). Brackets (CEEX's \
 Weyl.f): [ab] = ubar_-(a) u_+(b), \[LeftAngleBracket]ab\[RightAngleBracket] = \
-ubar_+(a) u_-(b), and the sandwiches \[LeftAngleBracket]a|3|b] = ubar_+(a) \
-p3slash u_+(b), [a|3|b\[RightAngleBracket] = ubar_-(a) p3slash u_-(b) with \
-the massive \[Pi]+ momentum. k1 and k2 are both along \[Xi], so \
-\[LeftAngleBracket]k1 k2\[RightAngleBracket] = [k1 k2] = 0. The labels \
-\[Lambda]a, \[Lambda]b are spin projections on the e+ beam axis: e+ helicity \
-\[Lambda]a, e- helicity -\[Lambda]b.\
-\>", "Text",ExpressionUUID->"c63655c5-da24-4774-9228-9780a3015fe2"],
+ubar_+(a) u_-(b), and the sandwiches with the massive \[Pi]+ momentum, \
+\[LeftAngleBracket]a|3|b] = ubar_+(a) p3slash u_+(b), are split the same way: \
+p3 = 3\[Flat] + k3, and for a light-like k, kslash = \
+|k\[RightAngleBracket][k| + |k]\[LeftAngleBracket]k|, so \
+\[LeftAngleBracket]a|3|b] = \[LeftAngleBracket]a \
+3\[Flat]\[RightAngleBracket][3\[Flat] b] + \[LeftAngleBracket]a k3\
+\[RightAngleBracket][k3 b]. k1, k2, k3 are all along \[Xi], so every bracket \
+of two k's vanishes. The result has only \[LeftAngleBracket]ij\
+\[RightAngleBracket] and [ij] of the light-like 1\[Flat], 2\[Flat], 3\[Flat], \
+k1, k2, k3. The labels \[Lambda]a, \[Lambda]b are spin projections on the e+ \
+beam axis: e+ helicity \[Lambda]a, e- helicity -\[Lambda]b.\
+\>", "Text",ExpressionUUID->"d5c0b9a1-88a5-445a-9ca4-6ff04be5a81a"],
 
 Cell["\<\
 (* a bar spinor or spinor as a list of {coefficient, chirality, light-like \
@@ -405,44 +412,49 @@ scalarPair[{c1_, h1_, a_}, {c2_, h2_, b_}] := c1 c2 Which[h1 == 1 && h2 == \
 -1, ang[a, b], h1 == -1 && h2 == 1, sq[a, b], True, 0];
 vectorPair[{c1_, h1_, a_}, {c2_, h2_, b_}] := c1 c2 Which[h1 == 1 && h2 == 1, \
 angP[a, b], h1 == -1 && h2 == -1, sqP[a, b], True, 0];
-alongXi = {ang[\"k1\", \"k2\"] -> 0, sq[\"k1\", \"k2\"] -> 0};
+(* the \[Pi]+ split along \[Xi] too, p3 = 3\[Flat] + k3, and a light-like k: \
+kslash = |k\[RightAngleBracket][k| + |k]\[LeftAngleBracket]k| *)
+splitP3 = {angP[a_, b_] :> ang[a, \"3b\"] sq[\"3b\", b] + ang[a, \"k3\"] \
+sq[\"k3\", b],
+   sqP[a_, b_] :> sq[a, \"3b\"] ang[\"3b\", b] + sq[a, \"k3\"] ang[\"k3\", b]};
+kLabel[a_] := StringStartsQ[a, \"k\"];
+alongXi = {ang[a_?kLabel, b_?kLabel] -> 0, sq[a_?kLabel, b_?kLabel] -> 0};   \
+(* k1, k2, k3 all along \[Xi] *)
 basisBrackets[{la_, lb_}] := {Total[Flatten[Outer[vectorPair, vbarP1[la], \
 uP2[lb], 1]]],
-    Total[Flatten[Outer[scalarPair, vbarP1[la], uP2[lb], 1]]]} /. alongXi;
+    Total[Flatten[Outer[scalarPair, vbarP1[la], uP2[lb], 1]]]} /. splitP3 /. \
+alongXi;
 (* display: 1b -> 1\[Flat] *)
 show[a_] := StringReplace[a, \"b\" -> \"\\[Flat]\"];
 Format[ang[a_, b_]] := Row[{\"\\[LeftAngleBracket]\", show[a], \" \", \
 show[b], \"\\[RightAngleBracket]\"}];
 Format[sq[a_, b_]] := Row[{\"[\", show[a], \" \", show[b], \"]\"}];
-Format[angP[a_, b_]] := Row[{\"\\[LeftAngleBracket]\", show[a], \"|3|\", \
-show[b], \"]\"}];
-Format[sqP[a_, b_]] := Row[{\"[\", show[a], \"|3|\", show[b], \
-\"\\[RightAngleBracket]\"}];
 helicities = {{-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
 polAmp = Association[Table[h -> FF[1] basisBrackets[h][[1]] + FF[2] \
 basisBrackets[h][[2]], {h, helicities}]];
 TableForm[Table[{h, polAmp[h]}, {h, helicities}], TableHeadings -> {None, \
 {\"{\\[Lambda]a, \\[Lambda]b}\", \"M = FF1 T1 + FF2 T2\"}}]\
-\>", "Input",ExpressionUUID->"ab62057e-d981-4e9c-b267-81f8638e7546"],
+\>", "Input",ExpressionUUID->"10507818-1e09-4bd4-8946-286ce06ed61d"],
 
 Cell["\<\
 Reading it: k = m^2/(2p\[CenterDot]\[Xi]) \[Xi], so |k_i\[RightAngleBracket] \
-= m_i/\[Sqrt](2 p_i\[CenterDot]\[Xi]) |\[Xi]\[RightAngleBracket] and the \
-k-spinors carry one power of the mass, except that \[Xi] is parallel to the \
-e-: then 2\[Flat] is the small one (|2\[Flat]\[RightAngleBracket] ~ m_e) and \
-k2 \[RightArrow] p2. Massless limit: k1 \[RightArrow] 0, 2\[Flat] \
-\[RightArrow] 0, k2 \[RightArrow] p2, so M(-,-) \[RightArrow] FF1 \
-\[LeftAngleBracket]1|3|2], M(+,+) \[RightArrow] FF1 \
-[1|3|2\[RightAngleBracket], and the opposite labels (helicity flips) vanish: \
-each of their terms has one small spinor. At tree level FF1 = -2e^2/s, FF2 = \
-0 (section 4).\
-\>", "Text",ExpressionUUID->"306f437e-2ee1-422f-8c07-bf9b9b144fbe"],
+= m_i/\[Sqrt](2 p_i\[CenterDot]\[Xi]) |\[Xi]\[RightAngleBracket] (the same \
+for |k_i]) and the k-spinors carry one power of the mass, except that \[Xi] \
+is parallel to the e-: then 2\[Flat] is the small one (|2\[Flat]\
+\[RightAngleBracket] ~ m_e) and k2 \[RightArrow] p2. Massless limit: k1 \
+\[RightArrow] 0, 2\[Flat] \[RightArrow] 0, k2 \[RightArrow] p2, so M(-,-) \
+\[RightArrow] FF1 \[LeftAngleBracket]1 3\[Flat]\[RightAngleBracket][3\[Flat] \
+2], M(+,+) \[RightArrow] FF1 [1 3\[Flat]]\[LeftAngleBracket]3\[Flat] 2\
+\[RightAngleBracket], and the opposite labels (helicity flips) vanish: each \
+of their terms has one small spinor. At tree level FF1 = -2e^2/s, FF2 = 0 \
+(section 4).\
+\>", "Text",ExpressionUUID->"0009ca9c-3857-4680-b77e-8b8c36cea9ad"],
 
 Cell["\<\
 TableForm[Table[{h, polAmp[h] /. FF[i_] :> Fvec[[i]]}, {h, helicities}], \
 TableHeadings -> {None, {\"{\\[Lambda]a, \\[Lambda]b}\", \"M at tree \
 level\"}}]\
-\>", "Input",ExpressionUUID->"3e3666c4-c7a7-4584-80b4-7dfc713e62af"],
+\>", "Input",ExpressionUUID->"ef0d1a7f-5ca8-4eb4-9ff8-0fea223ebaac"],
 
 Cell["\<\
 Check at one point (\[Sqrt]s = 0.7, cos\[Theta] = 0.3, \[Phi] = 0.4, 40 \
@@ -451,7 +463,7 @@ u+ = (\[Sqrt]K+, \[Sqrt]K- e^i\[Phi], 0, 0), u- = (0, 0, -\[Sqrt]K- \
 e^-i\[Phi], \[Sqrt]K+), u+(\[Xi]) = (0, \[Sqrt]2, 0, 0), u-(\[Xi]) = (0, 0, \
 \[Sqrt]2, 0)) against vbar \[CapitalGamma] u built directly from the massive \
 spinors, and the spin sum against F.G.F.\
-\>", "Text",ExpressionUUID->"183d475c-2346-4910-b44e-03590e33bd17"],
+\>", "Text",ExpressionUUID->"2814f18a-c01e-4863-863b-5204697aff6f"],
 
 Cell["\<\
 mink[a_, b_] := a[[1]] b[[1]] - a[[2 ;; 4]] . b[[2 ;; 4]];
@@ -477,12 +489,12 @@ pt = Module[{E0 = 7/20, mE = 51099895/10^11, mP = 13957/10^5, c = 3/10, ph = \
 c}, {E0, -pp sn Cos[ph], -pp sn Sin[ph], -pp c}}, 40]];
 light = <|\"1b\" -> massless[flat[pt[[1]]]], \"2b\" -> massless[flat[pt[[2]]]],
    \"k1\" -> Sqrt[kScale[pt[[1]]]] xiSpinor, \"k2\" -> Sqrt[kScale[pt[[2]]]] \
+xiSpinor,
+   \"3b\" -> massless[flat[pt[[3]]]], \"k3\" -> Sqrt[kScale[pt[[3]]]] \
 xiSpinor|>;
 p3slash = Sum[pt[[3, m]] {1, -1, -1, -1}[[m]] gammaCEEX[[m]], {m, 4}];
 bracketValues = {ang[a_, b_] :> diracBar[light[a][1]] . light[b][-1], sq[a_, \
-b_] :> diracBar[light[a][-1]] . light[b][1],
-   angP[a_, b_] :> diracBar[light[a][1]] . p3slash . light[b][1], sqP[a_, b_] \
-:> diracBar[light[a][-1]] . p3slash . light[b][-1]};
+b_] :> diracBar[light[a][-1]] . light[b][1]};
 (* the massive spinors of CEEX built directly, and vbar(p1) Gamma u(p2) *)
 u2[l_] := light[\"2b\"][l] + light[\"k2\"][-l]; v1[l_] := light[\"1b\"][-l] - \
 light[\"k1\"][l];
@@ -492,7 +504,7 @@ TableForm[Table[{h, N[Max[Abs[(basisBrackets[h] /. bracketValues) - \
 direct[h]]], 3]}, {h, helicities}],
   TableHeadings -> {None, {\"{\\[Lambda]a, \\[Lambda]b}\", \"|brackets - \
 direct|\"}}]\
-\>", "Input",ExpressionUUID->"1f2cb0ca-120f-4246-b426-0958cc575bd9"],
+\>", "Input",ExpressionUUID->"c2add381-3d4e-426a-89ba-38e4ac6bfd65"],
 
 Cell["\<\
 treeAt = Fvec /. {s -> mink[pt[[1]] + pt[[2]], pt[[1]] + pt[[2]]]};
@@ -503,24 +515,25 @@ mink[pt[[1]] - pt[[3]], pt[[1]] - pt[[3]]],
       me -> Sqrt[mink[pt[[1]], pt[[1]]]], mpi -> Sqrt[mink[pt[[3]], \
 pt[[3]]]]}) . treeAt;
 N[{spinSum, FGF, spinSum/FGF - 1} /. SMP[\"e\"] -> 1, 20]\
-\>", "Input",ExpressionUUID->"89babe20-302d-4beb-978a-cdb42cf37d5c"],
+\>", "Input",ExpressionUUID->"abdf3cd0-a4a7-42f1-9579-fea4cdeed4a4"],
 
 Cell["\<\
 Save the polarised amplitudes, one file per helicity, Pol_Amp_<\[Lambda]a><\
 \[Lambda]b>.m (m/p for -1/+1, e.g. Pol_Amp_mp.m: \[Lambda]a = -1, \[Lambda]b \
-= +1), as FF[1] T1 + FF[2] T2 in the brackets ang[a, b], sq[a, b], angP[a, b] \
-= \[LeftAngleBracket]a|3|b], sqP[a, b] = [a|3|b\[RightAngleBracket] of the \
-light-like momenta \"1b\", \"k1\", \"2b\", \"k2\". The form factors FF[i] are \
-those of FF_Tree_i.m (or FF_1L_i.m at one loop): the bracket structure is the \
-same at every order.\
-\>", "Text",ExpressionUUID->"48cd20b8-210d-4a5c-8cbd-7cb025636c88"],
+= +1), as FF[1] T1 + FF[2] T2 in the brackets ang[a, b] = \
+\[LeftAngleBracket]ab\[RightAngleBracket] and sq[a, b] = [ab] of the \
+light-like momenta \"1b\", \"2b\", \"3b\", \"k1\", \"k2\", \"k3\" (p_i = i\
+\[Flat] + k_i, k_i = m_i^2/(2 p_i\[CenterDot]\[Xi]) \[Xi], \[Xi] = (1, 0, 0, \
+-1)). The form factors FF[i] are those of FF_Tree_i.m (or FF_1L_i.m at one \
+loop): the bracket structure is the same at every order.\
+\>", "Text",ExpressionUUID->"dd88f0ab-2f28-4883-b671-2591922e630b"],
 
 Cell["\<\
 label[l_] := If[l == 1, \"p\", \"m\"];
 Do[Put[polAmp[h], FileNameJoin[{outDir, \"Pol_Amp_\" <> label[h[[1]]] <> \
 label[h[[2]]] <> \".m\"}]], {h, helicities}];
 FileNames[\"Pol_Amp_*\", outDir]\
-\>", "Input",ExpressionUUID->"13cbf88c-3187-4a3a-9e6d-747d1ba5e035"]
+\>", "Input",ExpressionUUID->"02adce81-86c3-42c2-be5b-27bbb0c9f8e7"]
 },
 WindowSize->{1100, 800},
 FrontEndVersion->"14.2 for Linux x86 (64-bit) (March 16, 2025)",
@@ -563,16 +576,16 @@ Cell[11910, 303, 81, 0, 70, "Section",ExpressionUUID->"a357f89f-0b3d-4a44-b012-f
 Cell[11994, 305, 478, 7, 70, "Text",ExpressionUUID->"2417d222-b344-4bb2-b46c-9c8be8ec8ff6"],
 Cell[12475, 314, 635, 16, 70, "Input",ExpressionUUID->"45afd477-3442-41a1-81f1-525a78195d4a"],
 Cell[13113, 332, 1521, 43, 70, "Input",ExpressionUUID->"a07ca69d-20df-4775-9fe9-8ff7faef0bde"],
-Cell[14637, 377, 116, 0, 70, "Section",ExpressionUUID->"69a37ca5-c508-4102-a9ce-bc1d3ed1b129"],
-Cell[14756, 379, 1252, 17, 70, "Text",ExpressionUUID->"c63655c5-da24-4774-9228-9780a3015fe2"],
-Cell[16011, 398, 1514, 27, 70, "Input",ExpressionUUID->"ab62057e-d981-4e9c-b267-81f8638e7546"],
-Cell[17528, 427, 752, 11, 70, "Text",ExpressionUUID->"306f437e-2ee1-422f-8c07-bf9b9b144fbe"],
-Cell[18283, 440, 236, 4, 70, "Input",ExpressionUUID->"3e3666c4-c7a7-4584-80b4-7dfc713e62af"],
-Cell[18522, 446, 499, 7, 70, "Text",ExpressionUUID->"183d475c-2346-4910-b44e-03590e33bd17"],
-Cell[19024, 455, 2189, 39, 70, "Input",ExpressionUUID->"1f2cb0ca-120f-4246-b426-0958cc575bd9"],
-Cell[21216, 496, 524, 9, 70, "Input",ExpressionUUID->"89babe20-302d-4beb-978a-cdb42cf37d5c"],
-Cell[21743, 507, 572, 8, 70, "Text",ExpressionUUID->"48cd20b8-210d-4a5c-8cbd-7cb025636c88"],
-Cell[22318, 517, 272, 5, 70, "Input",ExpressionUUID->"13cbf88c-3187-4a3a-9e6d-747d1ba5e035"]
+Cell[14637, 377, 168, 2, 70, "Section",ExpressionUUID->"9bb3c227-4f60-4a3d-a893-8ddbbc63b2ca"],
+Cell[14808, 381, 1591, 22, 70, "Text",ExpressionUUID->"d5c0b9a1-88a5-445a-9ca4-6ff04be5a81a"],
+Cell[16402, 405, 1743, 31, 70, "Input",ExpressionUUID->"10507818-1e09-4bd4-8946-286ce06ed61d"],
+Cell[18148, 438, 846, 12, 70, "Text",ExpressionUUID->"0009ca9c-3857-4680-b77e-8b8c36cea9ad"],
+Cell[18997, 452, 236, 4, 70, "Input",ExpressionUUID->"ef0d1a7f-5ca8-4eb4-9ff8-0fea223ebaac"],
+Cell[19236, 458, 499, 7, 70, "Text",ExpressionUUID->"2814f18a-c01e-4863-863b-5204697aff6f"],
+Cell[19738, 467, 2139, 39, 70, "Input",ExpressionUUID->"c2add381-3d4e-426a-89ba-38e4ac6bfd65"],
+Cell[21880, 508, 524, 9, 70, "Input",ExpressionUUID->"abdf3cd0-a4a7-42f1-9579-fea4cdeed4a4"],
+Cell[22407, 519, 654, 9, 70, "Text",ExpressionUUID->"dd88f0ab-2f28-4883-b671-2591922e630b"],
+Cell[23064, 530, 272, 5, 70, "Input",ExpressionUUID->"02adce81-86c3-42c2-be5b-27bbb0c9f8e7"]
 }
 ]
 *)

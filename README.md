@@ -7,9 +7,9 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
 - `ee_pipi_FF_Tree.nb` — e⁺e⁻ → π⁺π⁻ in scalar QED at tree level. The amplitude is projected onto the
   basis {v̄(p1) p̸3 u(p2), v̄(p1) u(p2)}; the form factors follow from solving G·F = B with G the Gram
   matrix of the basis and B the projection of the amplitude. Result: F1 = −2e²/s, F2 = 0. Then the
-  polarised amplitudes M(λa, λb) = FF1 T1 + FF2 T2 in spinor brackets: each massive e± is split along a
-  light-like reference ξ as in CEEX (p = p♭ + k, k ∝ ξ, u(p) = u(p♭) + u(k)), so e.g.
-  M(−,−) = FF1 (⟨1♭|3|k2] − [k1|3|2♭⟩) + FF2 ⟨1♭2♭⟩; λ = 2S_z along the e⁺ beam (e⁺ helicity λa, e⁻ −λb).
+  polarised amplitudes M(λa, λb) = FF1 T1 + FF2 T2 in the brackets ⟨ij⟩, [ij] only: every massive momentum
+  is split along a light-like reference ξ as in CEEX (p = p♭ + k, k ∝ ξ, u(p) = u(p♭) + u(k), p̸₃ = Σ |·⟩[·| + |·]⟨·|),
+  and brackets of two k's vanish, so e.g. M(−,−) = FF1 (⟨1♭3♭⟩[3♭k₂] − [k₁3♭]⟨3♭2♭⟩) + FF2 ⟨1♭2♭⟩; λ = 2S_z along the e⁺ beam (e⁺ helicity λa, e⁻ −λb).
 - `ee_pipi_FF_1L.nb` — the same at one loop (bare 1PI amplitude, ten diagrams, D dimensions). The form
   factors are obtained in two independent ways: projecting first and tensor-reducing the traces with TID,
   and tensor-reducing the open amplitude first and reading the coefficients off with the Dirac equation.
@@ -30,7 +30,7 @@ Form-factor (tensor) decomposition of scattering amplitudes with FeynCalc and Fe
 - `ee_pipi/` — the resulting form factors as Mathematica expressions, one file per form factor
   (`FF_Tree_1.m`, `FF_Tree_2.m`, `FF_1L_1.m`, `FF_1L_2.m`) plus the Gram matrix of the basis. Both notebooks
   write here, and the tree notebook also writes the polarised amplitudes `Pol_Amp_<λa><λb>.m` (m/p = −1/+1):
-  FF[1] T1 + FF[2] T2 in the brackets ang, sq, angP = ⟨a|3|b], sqP = [a|3|b⟩ of "1b", "k1", "2b", "k2",
+  FF[1] T1 + FF[2] T2 in ang[a,b] = ⟨ab⟩, sq[a,b] = [ab] of "1b", "2b", "3b", "k1", "k2", "k3",
   the same at every order (FF from FF_Tree_i.m or FF_1L_i.m). The form-factor files are expressed in s, t, m12 = me² and m32 = mpi² (odd powers of the masses appear as
   Sqrt[m12], Sqrt[m32]); the one-loop files are in the scalar A0/B0/C0/D0 basis with D kept symbolic.
 
