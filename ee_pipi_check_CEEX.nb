@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       154,          7]
-NotebookDataLength[      6276,        136]
-NotebookOptionsPosition[      4812,        111]
-NotebookOutlinePosition[      5128,        125]
-CellTagsIndexPosition[      5085,        122]
+NotebookDataLength[     12623,        252]
+NotebookOptionsPosition[     10134,        216]
+NotebookOutlinePosition[     10450,        230]
+CellTagsIndexPosition[     10407,        227]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -25,11 +25,12 @@ form factors\
 
 Cell["\<\
 Checks CEEX's numerical spin tensors T_pipi against the tree-level \
-decomposition of ee_pipi_FF_Tree.nb. Step 1, the Gram check: G_ij = \
-\[Sum]_spins T_i T_j^* does not depend on spinor phases or conventions, so \
-CEEX's tensors summed over the four helicities must reproduce \
-ee_pipi/Gram_Matrix.m at the same phase-space point. Plain Mathematica, no \
-FeynCalc.\
+decomposition of ee_pipi_FF_Tree.nb. Step 1, the Gram check (sections 2-3): \
+G_ij = \[Sum]_spins T_i T_j^* does not depend on spinor phases or \
+conventions, so CEEX's tensors summed over the four helicities must reproduce \
+ee_pipi/Gram_Matrix.m at the same phase-space point. Step 2, per helicity \
+(section 4): CEEX's spinor construction rebuilt here, compared helicity by \
+helicity with phases. Plain Mathematica, no FeynCalc.\
 \>", "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
 
 Cell["1. The CEEX point", "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
@@ -107,7 +108,111 @@ Cell["\<\
 F = {Get[FileNameJoin[{dir, \"FF_Tree_1.m\"}]], Get[FileNameJoin[{dir, \
 \"FF_Tree_2.m\"}]]} /. SMP[\"e\"] -> 1;
 {F, F . GNB . F, bornSum, Abs[F . GNB . F/bornSum - 1]}\
-\>", "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"]
+\>", "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"],
+
+Cell["4. Per-helicity check: CEEX's spinors rebuilt", "Section",ExpressionUUID->"4099d38d-f56f-46dd-9e20-3ff093a2db5a"],
+
+Cell["\<\
+The Gram matrix cannot see phases. Here CEEX's construction \
+(SCRIPTS/Spinors.f, Weyl.f) is transcribed operation by operation: the \
+chiral-basis \[Gamma] matrices g0..g3 (Fortran reshape is column-major), ubar \
+= (u3*, u4*, u1*, u2*), the massless spinors of weyl_spinors (u+ = \
+(\[Sqrt]K+, \[Sqrt]K- e^i\[Phi], 0, 0), u- = (0, 0, -\[Sqrt]K- e^-i\[Phi], \
+\[Sqrt]K+), e^i\[Phi] = \[PlusMinus]1 on the z axis; rephase_backward = False \
+at LO), and the massive spinors on the reference \[Xi] = XI_BEAM = (1, 0, 0, \
+-1): u_\[Lambda](p) = u_\[Lambda](p\[Flat]) + m/\[Sqrt](2p\[CenterDot]\[Xi]) \
+u_-\[Lambda](\[Xi]), v_\[Lambda](p) = u_-\[Lambda](p\[Flat]) - m/\[Sqrt](2p\
+\[CenterDot]\[Xi]) u_\[Lambda](\[Xi]), p\[Flat] = p - \
+m^2/(2p\[CenterDot]\[Xi]) \[Xi], with the hard-coded u+(\[Xi]) = (0, \
+\[Sqrt]2, 0, 0), u-(\[Xi]) = (0, 0, \[Sqrt]2, 0). The e line of T_pipi is \
+ubar(p2, \[Lambda]b) ... v(p1, \[Lambda]a).\
+\>", "Text",ExpressionUUID->"bc8b195f-72ff-4f9b-a7c5-1c8f880cc65f"],
+
+Cell["\<\
+fm[l_] := Transpose[Partition[l, 4]];
+g = {fm[{0,0,1,0, 0,0,0,1, 1,0,0,0, 0,1,0,0}], fm[{0,0,0,1, 0,0,1,0, \
+0,-1,0,0, -1,0,0,0}],
+     fm[{0,0,0,I, 0,0,-I,0, 0,-I,0,0, I,0,0,0}], fm[{0,0,1,0, 0,0,0,-1, \
+-1,0,0,0, 0,1,0,0}]};
+dbar[u_] := Conjugate[u[[{3, 4, 1, 2}]]];
+weyl[K_] := Module[{e = K[[2]] + I K[[3]], sp, sm},
+   e = If[e != 0, e/Abs[e], If[K[[4]] > 0, 1, -1]];
+   sp = Sqrt[Max[K[[1]] + K[[4]], 0]]; sm = Sqrt[Max[K[[1]] - K[[4]], 0]];
+   <|1 -> {sp, sm e, 0, 0}, -1 -> {0, 0, -sm Conjugate[e], sp}|>];
+xi = {1, 0, 0, -1}; uxi = <|1 -> {0, Sqrt[2], 0, 0}, -1 -> {0, 0, Sqrt[2], \
+0}|>;
+massive[p_] := Module[{ma = Sqrt[mdot[p, p]], dot = mdot[p, xi], pf, uf, c},
+   pf = p - xi ma^2/(2 dot); uf = weyl[pf]; c = Sqrt[mdot[p, p]]/Sqrt[2 dot];
+   <|\"u\" -> <|1 -> uf[1] + c uxi[-1], -1 -> uf[-1] + c uxi[1]|>,
+     \"v\" -> <|1 -> uf[-1] - c uxi[1], -1 -> uf[1] - c uxi[-1]|>|>];
+tens[P_, la_, lb_] := Module[{ub = dbar[massive[P[[2]]][\"u\"][lb]], v = \
+massive[P[[1]]][\"v\"][la], J},
+   J = Table[ub . g[[m]] . v, {m, 4}];
+   {mdot[J, P[[3]]], ub . v}];\
+\>", "Input",ExpressionUUID->"210d131c-866c-4ce7-aed0-39160b522df6"],
+
+Cell["\<\
+The same point exactly: \[Sqrt]s = 7/10, cos\[Theta] = 3/10, \[Phi] = 2/5, \
+the masses of CEEX's Constants.f, at any precision.\
+\>", "Text",ExpressionUUID->"a20bc7ac-5931-4fe1-8c10-76756efbfec6"],
+
+Cell["\<\
+exactP[prec_] := Module[{E0 = 7/20, mE = 51099895/10^11, mP = 13957/10^5, c = \
+3/10, ph = 2/5, pe, pp, sn},
+   pe = Sqrt[E0^2 - mE^2]; pp = Sqrt[E0^2 - mP^2]; sn = Sqrt[1 - c^2];
+   N[{{E0, 0, 0, pe}, {E0, 0, 0, -pe}, {E0, pp sn Cos[ph], pp sn Sin[ph], pp \
+c},
+      {E0, -pp sn Cos[ph], -pp sn Sin[ph], -pp c}}, prec]];
+Px = exactP[50];\
+\>", "Input",ExpressionUUID->"7074ce22-6c09-41b7-a92e-d908a27f8c88"],
+
+Cell["\<\
+Per helicity, |replica/CEEX - 1| for the complex T1, T2 (modulus and phase \
+together): the replica in double precision on CEEX's own momenta, and the \
+exact replica (50 digits).\
+\>", "Text",ExpressionUUID->"61204f97-9b5e-4936-8e2b-d12af9d0e4bc"],
+
+Cell["\<\
+rel[a_, b_] := If[b == 0, If[a == 0, 0, a], N[Abs[a/b - 1]]];
+TableForm[Table[With[{la = h[[1]], lb = h[[2]]}, Join[{h, Abs[T[1, la, lb]], \
+Abs[T[2, la, lb]]},
+     MapThread[rel, {tens[{p1, p2, p3, p4}, la, lb], {T[1, la, lb], T[2, la, \
+lb]}}],
+     MapThread[rel, {tens[Px, la, lb], {T[1, la, lb], T[2, la, lb]}}]]], {h, \
+hels}],
+  TableHeadings -> {None, {\"{\[Lambda]a, \[Lambda]b}\", \"|T1|\", \"|T2|\", \
+\"T1 double\", \"T2 double\", \"T1 exact\", \"T2 exact\"}}]\
+\>", "Input",ExpressionUUID->"c1430347-4036-4924-83e2-766adaa3d820"],
+
+Cell["\<\
+Result: the double-precision replica reproduces CEEX to 2-6\[Times]10^-16 in \
+every helicity, phases included: the conventions are transcribed exactly. The \
+exact replica differs from CEEX by 1.1\[Times]10^-12 (8\[Times]10^-12 for the \
+m_e-suppressed T1), which is CEEX's double-precision error. Its source is p2\
+\[CenterDot]\[Xi] = E - pz for the e-, whose momentum is parallel to \[Xi]: a \
+cancellation, 5.6\[Times]10^-12 off in double.\
+\>", "Text",ExpressionUUID->"40dbc9de-ec9b-4eec-9097-48a05e2a0aa4"],
+
+Cell["\<\
+{mdot[p2, xi], N[mdot[Px[[2]], xi], 20], N[mdot[p2, xi]/mdot[Px[[2]], xi] - \
+1]}\
+\>", "Input",ExpressionUUID->"34adbff7-d496-4d8d-b742-dc32693f4075"],
+
+Cell["\<\
+And the exact replica satisfies the notebook's Gram matrix to all 50 digits: \
+CEEX's spinors, as constructed, are the physics of ee_pipi_FF_Tree.nb, \
+helicity by helicity in CEEX's phase convention.\
+\>", "Text",ExpressionUUID->"1ef01660-17d7-42ed-996c-862b5c843a5d"],
+
+Cell["\<\
+Tx = Table[tens[Px, h[[1]], h[[2]]], {h, hels}];
+Gx = Table[Sum[Tx[[k, i]] Conjugate[Tx[[k, j]]], {k, 4}], {i, 2}, {j, 2}];
+GNBx = Block[{s, t}, Get[FileNameJoin[{dir, \"Gram_Matrix.m\"}]] /. {m12 -> \
+mdot[Px[[1]], Px[[1]]],
+     m32 -> mdot[Px[[3]], Px[[3]]], s -> mdot[Px[[1]] + Px[[2]], Px[[1]] + \
+Px[[2]]], t -> mdot[Px[[1]] - Px[[3]], Px[[1]] - Px[[3]]]}];
+N[Max[Abs[Flatten[Gx - GNBx]/Flatten[GNBx]]]]\
+\>", "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"]
 },
 FrontEndVersion->"14.2 for Linux x86 (64-bit) (March 16, 2025)",
 StyleDefinitions->"Default.nb",
@@ -125,19 +230,30 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[554, 20, 169, 3, 70, "Title",ExpressionUUID->"a2317614-d243-4053-b720-af57d77c2095"],
-Cell[726, 25, 445, 7, 70, "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
-Cell[1174, 34, 91, 0, 70, "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
-Cell[1268, 36, 626, 9, 70, "Text",ExpressionUUID->"23bf2174-4d67-4a96-a9b5-dfe79e958ba0"],
-Cell[1897, 47, 278, 6, 70, "Input",ExpressionUUID->"199d89fc-955f-4b9c-bff8-31db77cc7d89"],
-Cell[2178, 55, 303, 4, 70, "Text",ExpressionUUID->"588e7817-699c-43c3-bd2c-9b410cdb289e"],
-Cell[2484, 61, 384, 7, 70, "Input",ExpressionUUID->"a3a221e5-e474-4c8c-9b03-b330445bdcd5"],
-Cell[2871, 70, 87, 0, 70, "Section",ExpressionUUID->"ff6659ba-b07f-4c58-92a1-c738e3bb9ddb"],
-Cell[2961, 72, 348, 5, 70, "Text",ExpressionUUID->"1d80e715-4f19-4abb-b7ed-84b4e32d2582"],
-Cell[3312, 79, 358, 7, 70, "Input",ExpressionUUID->"61aa8557-6d37-489e-b2b6-73ad4835cc7a"],
-Cell[3673, 88, 563, 8, 70, "Text",ExpressionUUID->"a460f74e-c670-4054-a572-6eb1d4d26695"],
-Cell[4239, 98, 90, 0, 70, "Section",ExpressionUUID->"539de5bd-3fc3-44d7-8fa7-8ada5bbc8dfa"],
-Cell[4332, 100, 225, 3, 70, "Text",ExpressionUUID->"75688fe6-4511-4212-8ef9-b5ccbcd2ef8f"],
-Cell[4560, 105, 248, 4, 70, "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"]
+Cell[726, 25, 580, 8, 70, "Text",ExpressionUUID->"0533be6d-a84c-4a35-a0e9-c2a0a0b26b96"],
+Cell[1309, 35, 91, 0, 70, "Section",ExpressionUUID->"12a3a78f-0681-4012-80bb-b6f6dcb7b749"],
+Cell[1403, 37, 626, 9, 70, "Text",ExpressionUUID->"23bf2174-4d67-4a96-a9b5-dfe79e958ba0"],
+Cell[2032, 48, 278, 6, 70, "Input",ExpressionUUID->"199d89fc-955f-4b9c-bff8-31db77cc7d89"],
+Cell[2313, 56, 303, 4, 70, "Text",ExpressionUUID->"588e7817-699c-43c3-bd2c-9b410cdb289e"],
+Cell[2619, 62, 384, 7, 70, "Input",ExpressionUUID->"a3a221e5-e474-4c8c-9b03-b330445bdcd5"],
+Cell[3006, 71, 87, 0, 70, "Section",ExpressionUUID->"ff6659ba-b07f-4c58-92a1-c738e3bb9ddb"],
+Cell[3096, 73, 348, 5, 70, "Text",ExpressionUUID->"1d80e715-4f19-4abb-b7ed-84b4e32d2582"],
+Cell[3447, 80, 358, 7, 70, "Input",ExpressionUUID->"61aa8557-6d37-489e-b2b6-73ad4835cc7a"],
+Cell[3808, 89, 563, 8, 70, "Text",ExpressionUUID->"a460f74e-c670-4054-a572-6eb1d4d26695"],
+Cell[4374, 99, 90, 0, 70, "Section",ExpressionUUID->"539de5bd-3fc3-44d7-8fa7-8ada5bbc8dfa"],
+Cell[4467, 101, 225, 3, 70, "Text",ExpressionUUID->"75688fe6-4511-4212-8ef9-b5ccbcd2ef8f"],
+Cell[4695, 106, 248, 4, 70, "Input",ExpressionUUID->"b8f3b203-7d59-4e4a-b5f9-78c04d1df24e"],
+Cell[4946, 112, 119, 0, 70, "Section",ExpressionUUID->"4099d38d-f56f-46dd-9e20-3ff093a2db5a"],
+Cell[5068, 114, 1001, 14, 70, "Text",ExpressionUUID->"bc8b195f-72ff-4f9b-a7c5-1c8f880cc65f"],
+Cell[6072, 130, 1146, 21, 70, "Input",ExpressionUUID->"210d131c-866c-4ce7-aed0-39160b522df6"],
+Cell[7221, 153, 207, 3, 70, "Text",ExpressionUUID->"a20bc7ac-5931-4fe1-8c10-76756efbfec6"],
+Cell[7431, 158, 419, 8, 70, "Input",ExpressionUUID->"7074ce22-6c09-41b7-a92e-d908a27f8c88"],
+Cell[7853, 168, 258, 4, 70, "Text",ExpressionUUID->"61204f97-9b5e-4936-8e2b-d12af9d0e4bc"],
+Cell[8114, 174, 553, 10, 70, "Input",ExpressionUUID->"c1430347-4036-4924-83e2-766adaa3d820"],
+Cell[8670, 186, 522, 7, 70, "Text",ExpressionUUID->"40dbc9de-ec9b-4eec-9097-48a05e2a0aa4"],
+Cell[9195, 195, 161, 3, 70, "Input",ExpressionUUID->"34adbff7-d496-4d8d-b742-dc32693f4075"],
+Cell[9359, 200, 279, 4, 70, "Text",ExpressionUUID->"1ef01660-17d7-42ed-996c-862b5c843a5d"],
+Cell[9641, 206, 489, 8, 70, "Input",ExpressionUUID->"2c1ced94-591f-4102-a842-c90435dc0ac0"]
 }
 ]
 *)
